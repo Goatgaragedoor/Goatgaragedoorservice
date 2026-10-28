@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OfferCarousel from '../../components/OfferCarousel.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getService, services } from '../../data/services';
+import { workById } from '../../data/work';
+import { breadcrumbNode, faqNode, pageSchema, serviceNode } from '../../data/schema';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+	return services.map((service) => ({
+		params: { slug: service.slug },
+	}));
+}
+
+const slug = Astro.params.slug;
+if (!slug) throw new Error('Missing service slug');
+const service = getService(slug);
+if (!service) throw new Error(`Unknown service: ${slug}`);
+
+const photo = workById(service.imageId);
+const shortTitle = service.title.replace('Garage Door ', '');
+const photoFocus: Record<string, string> = {
+	'tech-spring': '18% center',
+	'tech-repair': 'center 30%',
+	'door-removal': '72% center',
+	'opener-chamberlain': '68% center',
+	'opener-truck': '42% center',
+	'spring-new': '38% center',
+	'spring-gap': '42% center',
+	'old-gray-door': '30% center',
+	'job-windows': 'center 40%',
+};
+const focus = photoFocus[service.imageId] ?? 'center center';
+
+const schema = pageSchema([
+	serviceNode(service),
+	faqNode(service.faqs),
+	breadcrumbNode([
+		{ name: 'Home', path: '/' },
+		{ name: 'Services', path: '/services' },
+		{ name: service.title, path: `/services/${service.slug}` },
+	]),
+]);
+---
+
+<BaseLayout title={`${service.title} in Fishers, IN | Goat Garage Door Service`} description={service.description} schema={schema}>
+	<div class="hero-stack">
+	<PageHero
+		eyebrow="Fishers & Indianapolis · 24/7"
+		title={service.title}
+		lead={service.lead}
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Services', href: '/services' },
+			{ label: service.title },
+		]}
+	>
+		<div class="hero-actions">
+			<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			<a class="btn btn-ghost" href="/contact">Request service</a>
+		</div>
+	</PageHero>
+
+	<section class="benefit-strip">
+		<ul class="container">
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<circle cx="12" cy="12" r="9"></circle>
+					<path d="M12 7v5l3 2"></path>
+				</svg>
+				<strong>24/7</strong>
+				<span>Emergency service</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M12 2.5v19"></path>
+					<path d="M17 6.2H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+				</svg>
+				<strong>Price first</strong>
+				<span>Before any work</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<path d="M20 7 10 17l-6-6"></path>
+				</svg>
+				<strong>We return</strong>
+				<span>If it is not right</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+					<path d="M4 11.5 12 5l8 6.5"></path>
+					<path d="M7 10.5V19h10v-8.5"></path>
+				</svg>
+				<strong>Fishers</strong>
+				<span>And Indianapolis</span>
+			</li>
+		</ul>
+	</section>
+	</div>
+
+	<section class="svc-story">
+		<div class="container svc-story-layout">
+			<div class="svc-story-copy">
+				<p class="band-kicker">The job</p>
+				<h2>{shortTitle}</h2>
+				{service.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+				{
+					service.safety && (
+						<p class="callout">
+							<strong>Safety. </strong>
+							{service.safety}
+						</p>
+					)
+				}
+				<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			</div>
+			<figure class="svc-story-photo">
+				<Image
+					src={photo.src}
+					alt={photo.alt}
+					widths={[640, 960]}
+					sizes="(min-width: 900px) 46vw, 100vw"
+					quality={86}
+					style={`object-position: ${focus}`}
+				/>
+				<figcaption>
+					{photo.title}
+					{photo.place ? ` · ${photo.place}` : ''}
+				</figcaption>
+			</figure>
+		</div>
+	</section>
+
+	<section class="svc-visit" aria-labelledby="visit-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">On site</p>
+				<h2 id="visit-title">What the visit looks like</h2>
+			</div>
+			<div class="svc-visit-grid">
+				<div>
+					<h3>When to call</h3>
+					<ol class="svc-points">
+						{
+							service.signs.map((sign, index) => (
+								<li>
+									<span class="reason-index" aria-hidden="true">
+										{String(index + 1).padStart(2, '0')}
+									</span>
+									<span>{sign}</span>
+								</li>
+							))
+						}
+					</ol>
+				</div>
+				<div>
+					<h3>What we do</h3>
+					<ol class="svc-points">
+						{
+							service.includes.map((item, index) => (
+								<li>
+									<span class="reason-index" aria-hidden="true">
+										{String(index + 1).padStart(2, '0')}
+									</span>
+									<span>{item}</span>
+								</li>
+							))
+						}
+					</ol>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<OfferCarousel
+		kicker="What we do"
+		title="Our services"
+		titleId="services-title"
+		quoteHref="/contact"
+	/>
+
+	<section class="home-faq" aria-labelledby="faq-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">Questions</p>
+				<h2 id="faq-title">Before you call</h2>
+			</div>
+			<div class="faq">
+				{
+					service.faqs.map((faq) => (
+						<details>
+							<summary>{faq.q}</summary>
+							<p>{faq.a}</p>
+						</details>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</BaseLayout>

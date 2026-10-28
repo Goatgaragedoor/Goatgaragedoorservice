@@ -1,0 +1,298 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ProjectCarousel from '../components/ProjectCarousel.astro';
+import { areas } from '../data/areas';
+import { breadcrumbNode, faqNode, pageSchema } from '../data/schema';
+import { addressLine, site } from '../data/site';
+import goatHead from '../assets/images/goat-head.png';
+
+const straight = [
+	{
+		title: 'Expert repairs, done right',
+		text: 'From broken springs to faulty openers, we find the problem and fix it properly the first time.',
+	},
+	{
+		title: "Repair or replace? We'll guide you.",
+		text: 'We help you choose the right solution for your door without pushing unnecessary replacements.',
+	},
+	{
+		title: 'We check the whole system',
+		text: 'Springs, cables, tracks, and openers. We inspect the entire system, not just the obvious problem.',
+	},
+	{
+		title: 'Upfront pricing. No surprises.',
+		text: "You'll know the cost before any work begins. No hidden fees or unexpected charges.",
+	},
+];
+
+const featuredAreaSlugs = [
+	'fishers',
+	'indianapolis',
+	'carmel',
+	'noblesville',
+	'westfield',
+	'lawrence',
+	'zionsville',
+	'greenwood',
+	'brownsburg',
+];
+
+const featuredAreas = featuredAreaSlugs.map((slug) => {
+	const area = areas.find((item) => item.slug === slug);
+	if (!area) throw new Error(slug);
+	return area;
+});
+
+const faqs = [
+	{
+		q: 'Where are you based?',
+		a: `${site.name} is based at ${addressLine}. The run covers Fishers, Indianapolis, and the towns around them.`,
+	},
+	{
+		q: 'Do you answer at night?',
+		a: `Yes. Hours are ${site.hours}, including weekends and holidays. Call ${site.phoneDisplay} if the door is stuck.`,
+	},
+	{
+		q: 'Are the photos from real jobs?',
+		a: 'Yes. The photos on this site are from jobs in Fishers and Indianapolis — spring replacements, hinge repairs, opener installs, and new doors.',
+	},
+	{
+		q: 'When do I hear the price?',
+		a: 'Before the repair starts. If a full door is the better match, we say that before the door comes apart.',
+	},
+];
+---
+
+<BaseLayout
+	title="About Goat Garage Door Service | Fishers, IN"
+	description="Goat Garage Door Service is based at 10378 Glenn Abbey Ln in Fishers and works across the Indianapolis area, day and night. Call 317-854-6917."
+	schema={pageSchema([
+		breadcrumbNode([
+			{ name: 'Home', path: '/' },
+			{ name: 'About', path: '/about' },
+		]),
+		faqNode(faqs),
+	])}
+>
+	<div class="hero-stack">
+	<PageHero
+		title="Who we are"
+		lead="Repair and installation for residential doors, with a phone that is answered 24/7."
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'About' },
+		]}
+	>
+		<div class="hero-actions">
+			<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			<a class="btn btn-ghost" href="/contact">Request a visit</a>
+		</div>
+	</PageHero>
+
+	<section class="stats" aria-label="Service highlights">
+		<ul class="container">
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<circle cx="12" cy="12" r="9"></circle>
+					<path d="M12 7v5l3 2"></path>
+				</svg>
+				<strong>24/7</strong>
+				<span>Emergency Service</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L4 17l3 3 5.1-5.1a4 4 0 0 0 5.6-5.6l-2.2 2.2-2.8-2.8z"></path>
+				</svg>
+				<strong>500+</strong>
+				<span>Doors Repaired</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<path d="M4 11.5 12 5l8 6.5"></path>
+					<path d="M7 10.5V19h10v-8.5"></path>
+				</svg>
+				<strong>100%</strong>
+				<span>Local &amp; Family Operated</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+					<path d="m12 3.2 2.4 5.1 5.6.7-4.1 3.8 1.1 5.5L12 15.8 7 18.3l1.1-5.5L4 9l5.6-.7z"></path>
+				</svg>
+				<strong>5-Star</strong>
+				<span>Customer Reviews</span>
+			</li>
+		</ul>
+	</section>
+	</div>
+
+	<section class="reasons" aria-labelledby="about-title">
+		<img
+			class="reasons-mark"
+			src={goatHead.src}
+			width={goatHead.width}
+			height={goatHead.height}
+			alt=""
+		/>
+		<div class="container reasons-layout">
+			<div class="reasons-statement">
+				<p class="band-kicker">About us</p>
+				<h2 class="area-name" id="about-title">
+					Your <span>local</span><br />
+					garage door<br />
+					crew.
+				</h2>
+				<p>
+					At Goat Garage Door Service, we provide reliable garage door repair, installation, and maintenance for homeowners in Fishers, Indianapolis, and surrounding areas. From broken springs and damaged cables to malfunctioning openers and complete door replacements, our team delivers professional solutions to keep your garage door operating safely and smoothly.
+				</p>
+				<p>
+					Locally based at {addressLine}, we're available {site.hours} for emergency garage door services whenever you need us.
+				</p>
+				<a class="band-more" href="/contact">Request a visit</a>
+				<a
+					class="bbb-seal"
+					href="https://www.bbb.org/us/in/fishers/profile/garage-doors/goat-garage-door-service-0382-90073899/#sealclick"
+					target="_blank"
+					rel="nofollow noopener noreferrer"
+				>
+					<img
+						src="https://seal-indy.bbb.org/seals/blue-seal-160-82-bbb-90073899.png"
+						width="160"
+						height="82"
+						alt="Goat Garage Door Service BBB Business Review"
+					/>
+				</a>
+			</div>
+			<ol class="reason-list">
+				{
+					straight.map((item, index) => (
+						<li>
+							<span class="reason-index" aria-hidden="true">
+								{String(index + 1).padStart(2, '0')}
+							</span>
+							<div>
+								<strong>{item.title}</strong>
+								<span>{item.text}</span>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</section>
+
+	<section class="built" aria-labelledby="work-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">The work</p>
+				<h2 id="work-title">Real jobs</h2>
+				<a class="band-more" href="/our-work">View all projects</a>
+				<p class="band-lead">
+					The photos on this site are from jobs in Fishers and Indianapolis — spring replacements, hinge repairs, opener installs, and new doors.
+				</p>
+			</div>
+			<ProjectCarousel gallery="about-projects" />
+		</div>
+	</section>
+
+	<section class="places" aria-labelledby="places-title">
+		<div class="container places-layout">
+			<div class="places-copy">
+				<p class="band-kicker">Service areas</p>
+				<h2 id="places-title">Fishers and the<br />towns around it</h2>
+				<p>
+					Home base is Glenn Abbey Lane. Indianapolis and the towns around it are regular runs, day and night.
+				</p>
+				<div class="places-actions">
+					<a class="btn btn-orange places-all" href="/service-areas">
+						View all areas
+						<span aria-hidden="true">→</span>
+					</a>
+					<a class="btn btn-line places-call" href={`tel:${site.phoneTel}`}>Call now</a>
+				</div>
+			</div>
+			<div class="place-grid">
+				{
+					featuredAreas.map((area) => (
+						<a class="place-card" href={`/service-areas/${area.slug}`}>
+							<span class="place-name">
+								<strong>{area.name}</strong>
+								<span>{area.county}</span>
+							</span>
+							<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
+								<path
+									fill="currentColor"
+									fill-rule="evenodd"
+									d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+								/>
+							</svg>
+						</a>
+					))
+				}
+			</div>
+		</div>
+		<div class="container places-map">
+			<iframe
+				class="map-frame"
+				title="Goat Garage Door Service on Google Maps"
+				src={site.mapEmbed}
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"
+				allowfullscreen
+			></iframe>
+			<p>
+				<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
+			</p>
+		</div>
+	</section>
+
+	<section class="how" aria-labelledby="how-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">The visit</p>
+				<h2 id="how-title">How we work</h2>
+			</div>
+			<ol class="how-list">
+				<li>
+					<span class="how-step" aria-hidden="true">01</span>
+					<strong>You call</strong>
+					<p>Day or night, including holidays. If the door is stuck open, call {site.phoneDisplay}. A note works for a planned install.</p>
+				</li>
+				<li>
+					<span class="how-step" aria-hidden="true">02</span>
+					<strong>We come look</strong>
+					<p>The same Fishers crew rolls from Glenn Abbey Lane. We check the door by hand before we talk about parts.</p>
+				</li>
+				<li>
+					<span class="how-step" aria-hidden="true">03</span>
+					<strong>You hear the price</strong>
+					<p>The number comes before anything is replaced. If a full door is the better fix, we say that first.</p>
+				</li>
+				<li>
+					<span class="how-step" aria-hidden="true">04</span>
+					<strong>We finish the door</strong>
+					<p>Springs, cables, and the opener get checked. We test the door and the auto-reverse before we leave.</p>
+				</li>
+			</ol>
+		</div>
+	</section>
+
+	<section class="home-faq" aria-labelledby="faq-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">Questions</p>
+				<h2 id="faq-title">Before you call</h2>
+			</div>
+			<div class="faq">
+				{
+					faqs.map((faq) => (
+						<details>
+							<summary>{faq.q}</summary>
+							<p>{faq.a}</p>
+						</details>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</BaseLayout>

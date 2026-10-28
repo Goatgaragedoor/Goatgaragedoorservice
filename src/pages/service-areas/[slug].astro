@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OfferCarousel from '../../components/OfferCarousel.astro';
+import PageHero from '../../components/PageHero.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import { areas, getArea } from '../../data/areas';
+import { breadcrumbNode, faqNode, pageSchema } from '../../data/schema';
+import { addressLine, site } from '../../data/site';
+import goatHead from '../../assets/images/goat-head.png';
+
+export function getStaticPaths() {
+	return areas.map((area) => ({
+		params: { slug: area.slug },
+	}));
+}
+
+const slug = Astro.params.slug;
+if (!slug) throw new Error('Missing area slug');
+const area = getArea(slug);
+if (!area) throw new Error(`Unknown area: ${slug}`);
+
+const nearby = areas.filter((item) => item.slug !== area.slug);
+
+const faqs = [
+	{
+		q: `Do you work in ${area.name}?`,
+		a: `${area.lead} ${area.paragraphs[0]}`,
+	},
+	{
+		q: 'Do you answer at night?',
+		a: `Yes. Hours are ${site.hours}, including weekends and holidays. Call ${site.phoneDisplay} if the door is stuck open, hanging crooked, or will not lift.`,
+	},
+	{
+		q: 'Do you quote before the repair starts?',
+		a: 'Yes. You hear the number before any repair starts. If a full door is the right fix instead of one part, we say that before the door comes apart.',
+	},
+	{
+		q: `Which parts of ${area.name} do you already know?`,
+		a: `${area.places.join(', ')}. We are based at ${addressLine}.`,
+	},
+];
+
+const schema = pageSchema([
+	breadcrumbNode([
+		{ name: 'Home', path: '/' },
+		{ name: 'Service areas', path: '/service-areas' },
+		{ name: area.name, path: `/service-areas/${area.slug}` },
+	]),
+	{
+		'@type': 'Service',
+		name: `Garage door repair in ${area.name}, IN`,
+		areaServed: `${area.name}, Indiana`,
+		provider: { '@id': `${site.domain}/#business` },
+		url: `${site.domain}/service-areas/${area.slug}`,
+		description: area.description,
+	},
+	faqNode(faqs),
+]);
+---
+
+<BaseLayout title={`Garage Door Repair in ${area.name}, IN | Goat Garage Door Service`} description={area.description} schema={schema}>
+	<div class="area-page">
+	<div class="hero-stack">
+	<PageHero
+		eyebrow={`${area.county} · ${area.label}`}
+		title={`Garage door repair in ${area.name}`}
+		lead={area.lead}
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Service areas', href: '/service-areas' },
+			{ label: area.name },
+		]}
+	>
+		<div class="hero-actions">
+			<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			<a class="btn btn-ghost" href="#quote">Request service</a>
+		</div>
+	</PageHero>
+
+	<section class="stats" aria-label="Service highlights">
+		<ul class="container">
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<circle cx="12" cy="12" r="9"></circle>
+					<path d="M12 7v5l3 2"></path>
+				</svg>
+				<strong>24/7</strong>
+				<span>Emergency Service</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L4 17l3 3 5.1-5.1a4 4 0 0 0 5.6-5.6l-2.2 2.2-2.8-2.8z"></path>
+				</svg>
+				<strong>500+</strong>
+				<span>Doors Repaired</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+					<path d="M4 11.5 12 5l8 6.5"></path>
+					<path d="M7 10.5V19h10v-8.5"></path>
+				</svg>
+				<strong>100%</strong>
+				<span>Local &amp; Family Operated</span>
+			</li>
+			<li>
+				<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+					<path d="m12 3.2 2.4 5.1 5.6.7-4.1 3.8 1.1 5.5L12 15.8 7 18.3l1.1-5.5L4 9l5.6-.7z"></path>
+				</svg>
+				<strong>5-Star</strong>
+				<span>Customer Reviews</span>
+			</li>
+		</ul>
+	</section>
+	</div>
+
+	<OfferCarousel kicker={area.name} title="Services we bring" titleId="services-title" />
+
+	<section class="reasons" aria-labelledby="local-title">
+		<img
+			class="reasons-mark"
+			src={goatHead.src}
+			width={goatHead.width}
+			height={goatHead.height}
+			alt=""
+		/>
+		<div class="container reasons-layout">
+			<div class="reasons-statement">
+				<p class="band-kicker">{area.county}</p>
+				<h2 class="area-name" id="local-title">
+					Garage<br />
+					doors in<br />
+					<span>{area.name}.</span>
+				</h2>
+				<p class="area-places">{area.places.join(' · ')}</p>
+				<p>Based at {addressLine}. Hours are {site.hours}.</p>
+				<a class="band-more" href="#quote">Request service</a>
+			</div>
+			<ol class="reason-list reason-copy">
+				{
+					area.paragraphs.map((paragraph, index) => (
+						<li>
+							<span class="reason-index" aria-hidden="true">
+								{String(index + 1).padStart(2, '0')}
+							</span>
+							<div>
+								<span>{paragraph}</span>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</section>
+
+	<section class="places is-dark" aria-labelledby="nearby-title">
+		<div class="container places-layout">
+			<div class="places-copy">
+				<p class="band-kicker">Nearby</p>
+				<h2 id="nearby-title">Towns around<br />{area.name}</h2>
+				<p>The same Fishers crew covers these towns on the regular run.</p>
+				<div class="places-actions">
+					<a class="btn btn-orange places-all" href="/service-areas">
+						View all areas
+						<span aria-hidden="true">→</span>
+					</a>
+					<a class="btn btn-line places-call" href={`tel:${site.phoneTel}`}>Call now</a>
+				</div>
+			</div>
+			<div class="place-grid">
+				{
+					nearby.map((item) => (
+						<a class="place-card" href={`/service-areas/${item.slug}`}>
+							<span class="place-name">
+								<strong>{item.name}</strong>
+								<span>{item.county}</span>
+							</span>
+							<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
+								<path
+									fill="currentColor"
+									fill-rule="evenodd"
+									d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+								/>
+							</svg>
+						</a>
+					))
+				}
+			</div>
+		</div>
+		<div class="container places-map">
+			<iframe
+				class="map-frame"
+				title="Goat Garage Door Service on Google Maps"
+				src={site.mapEmbed}
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"
+				allowfullscreen
+			></iframe>
+			<p>
+				<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
+			</p>
+		</div>
+	</section>
+
+	<section class="svc-quote" id="quote">
+		<div class="container svc-quote-layout">
+			<div class="svc-quote-copy">
+				<p class="band-kicker">Estimate</p>
+				<h2>The price comes before the work.</h2>
+				<p>Describe the door in {area.name} and what it did. The number comes before anything is replaced.</p>
+				<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			</div>
+			<QuoteForm city={area.name} heading={`Request service in ${area.name}`} />
+		</div>
+	</section>
+
+	<section class="home-faq" aria-labelledby="faq-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">Questions</p>
+				<h2 id="faq-title">Before you call</h2>
+			</div>
+			<div class="faq">
+				{
+					faqs.map((faq) => (
+						<details>
+							<summary>{faq.q}</summary>
+							<p>{faq.a}</p>
+						</details>
+					))
+				}
+			</div>
+		</div>
+	</section>
+	</div>
+</BaseLayout>

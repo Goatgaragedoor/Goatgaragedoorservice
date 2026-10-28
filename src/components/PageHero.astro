@@ -1,0 +1,47 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import heroPhoto from '../assets/images/design/hero-truck.jpg';
+
+interface Crumb {
+	label: string;
+	href?: string;
+}
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	lead?: string;
+	crumbs?: Crumb[];
+	variant?: 'contact';
+}
+
+const { eyebrow, title, lead, crumbs = [], variant } = Astro.props;
+---
+
+<header class:list={['page-hero', variant && `is-${variant}`]}>
+	<img
+		class="page-hero-media"
+		src={heroPhoto.src}
+		width={heroPhoto.width}
+		height={heroPhoto.height}
+		alt=""
+		decoding="async"
+	/>
+	<div class="page-hero-shade"></div>
+	<div class="container page-hero-inner">
+		{crumbs.length > 0 && <Breadcrumbs crumbs={crumbs} />}
+		{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+		<h1>
+			{
+				title.split('\n').map((line, index) => (
+					<>
+						{index > 0 && <br />}
+						{line}
+					</>
+				))
+			}
+		</h1>
+		{lead && <p class="page-lead">{lead}</p>}
+		<slot />
+	</div>
+</header>

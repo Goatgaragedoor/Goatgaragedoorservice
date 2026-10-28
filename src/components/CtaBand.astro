@@ -1,0 +1,21 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+	title?: string;
+	eyebrow?: string;
+}
+
+const { title = 'Need the door working today?', eyebrow = 'Open 24/7 in Fishers and Indianapolis' } = Astro.props;
+---
+
+<section class="cta-band">
+	<div class="container cta-band-inner">
+		<p class="eyebrow">{eyebrow}</p>
+		<h2>{title}</h2>
+		<div class="stack-actions">
+			<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			<a class="btn btn-ghost" href="/contact">Request a quote</a>
+		</div>
+	</div>
+</section>

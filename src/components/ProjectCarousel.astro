@@ -1,0 +1,239 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { projectShowcase } from '../data/work';
+
+interface Props {
+	gallery?: string;
+}
+
+const { gallery = 'projects' } = Astro.props;
+
+const slides = await Promise.all(
+	projectShowcase.map(async (item) => {
+		const full = await getImage({
+			src: item.src,
+			width: Math.min(item.src.width, 1800),
+			quality: 86,
+		});
+		return {
+			...item,
+			full: full.src,
+			caption: item.place ? `${item.title} · ${item.place}` : item.title,
+		};
+	}),
+);
+---
+
+<div class="project-stage" data-project-band>
+	<div class="project-viewport" data-project-viewport aria-roledescription="carousel" aria-label="Project photos">
+		<div class="project-track" data-project-track>
+			{
+				slides.map((item, index) => (
+					<figure class="project-slide">
+						<button
+							type="button"
+							class="work-photo"
+							data-photo
+							data-gallery={gallery}
+							data-full={item.full}
+							data-caption={item.caption}
+							aria-label={`Open photo: ${item.alt}`}
+						>
+							<Image
+								src={item.src}
+								alt={item.alt}
+								widths={[480, 800]}
+								sizes="(min-width: 900px) 360px, (min-width: 640px) 50vw, 100vw"
+								quality={86}
+								loading={index < 3 ? 'eager' : 'lazy'}
+								style={`object-position: ${item.focus}`}
+							/>
+						</button>
+						<figcaption>
+							<strong>{item.title}</strong>
+							<span>{item.place ?? 'Fishers & Indianapolis'}</span>
+						</figcaption>
+					</figure>
+				))
+			}
+		</div>
+	</div>
+	<button class="project-nav project-prev" type="button" aria-label="Previous projects">
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4">
+			<path d="M15 5l-7 7 7 7"></path>
+		</svg>
+	</button>
+	<button class="project-nav project-next" type="button" aria-label="Next projects">
+		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4">
+			<path d="M9 5l7 7-7 7"></path>
+		</svg>
+	</button>
+</div>
+
+<script>
+	document.querySelectorAll('[data-project-band]').forEach((band) => {
+		const viewport = band.querySelector('[data-project-viewport]');
+		const track = band.querySelector('[data-project-track]');
+		const prev = band.querySelector('.project-prev');
+		const next = band.querySelector('.project-next');
+
+		if (!(viewport instanceof HTMLElement) || !(track instanceof HTMLElement) || !(prev instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) return;
+		if (track.children.length < 2) {
+			prev.hidden = true;
+			next.hidden = true;
+			return;
+		}
+
+		const dialog = document.querySelector('.photo-dialog');
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const ease = 'transform 0.7s cubic-bezier(.22, .7, .28, 1)';
+		let moving = false;
+		let moveToken = 0;
+		let mode: 'next' | 'prev' = 'next';
+		let timer = 0;
+		let pointerId: number | null = null;
+		let originX = 0;
+		let deltaX = 0;
+		let suppressClick = false;
+
+		const distance = () => {
+			const card = track.firstElementChild;
+			if (!(card instanceof HTMLElement)) return 0;
+			const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+			return card.getBoundingClientRect().width + gap;
+		};
+
+		const settle = (token: number) => {
+			if (!moving || token !== moveToken) return;
+			if (mode === 'next') {
+				const first = track.firstElementChild;
+				if (first) track.appendChild(first);
+			}
+			track.style.transition = 'none';
+			track.style.transform = 'translate3d(0, 0, 0)';
+			void track.offsetWidth;
+			moving = false;
+		};
+
+		const goNext = () => {
+			const shift = distance();
+			if (!shift || moving) return;
+			mode = 'next';
+			if (reduceMotion) {
+				const first = track.firstElementChild;
+				if (first) track.appendChild(first);
+				return;
+			}
+			moving = true;
+			const token = ++moveToken;
+			window.setTimeout(() => settle(token), 800);
+			track.style.transition = ease;
+			track.style.transform = `translate3d(${-shift}px, 0, 0)`;
+		};
+
+		const goPrev = () => {
+			const shift = distance();
+			const last = track.lastElementChild;
+			if (!shift || !last || moving) return;
+			mode = 'prev';
+			if (reduceMotion) {
+				track.prepend(last);
+				return;
+			}
+			moving = true;
+			track.prepend(last);
+			track.style.transition = 'none';
+			track.style.transform = `translate3d(${-shift}px, 0, 0)`;
+			void track.offsetWidth;
+			const token = ++moveToken;
+			window.setTimeout(() => settle(token), 800);
+			track.style.transition = ease;
+			track.style.transform = 'translate3d(0, 0, 0)';
+		};
+
+		track.addEventListener('transitionend', (event) => {
+			if (event.target !== track || event.propertyName !== 'transform') return;
+			settle(moveToken);
+		});
+
+		const stop = () => window.clearInterval(timer);
+		const start = () => {
+			if (reduceMotion) return;
+			if (dialog instanceof HTMLDialogElement && dialog.open) return;
+			stop();
+			timer = window.setInterval(() => {
+				if (dialog instanceof HTMLDialogElement && dialog.open) {
+					stop();
+					return;
+				}
+				goNext();
+			}, 5200);
+		};
+
+		next.addEventListener('click', () => {
+			goNext();
+			start();
+		});
+		prev.addEventListener('click', () => {
+			goPrev();
+			start();
+		});
+
+		band.addEventListener('mouseenter', stop);
+		band.addEventListener('mouseleave', start);
+		band.addEventListener('focusin', stop);
+		band.addEventListener('focusout', (event) => {
+			if (!band.contains(event.relatedTarget as Node | null)) start();
+		});
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) stop();
+			else start();
+		});
+		dialog?.addEventListener('close', () => start());
+		window.addEventListener('resize', () => {
+			moveToken += 1;
+			track.style.transition = 'none';
+			track.style.transform = 'translate3d(0, 0, 0)';
+			moving = false;
+		});
+
+		viewport.addEventListener('pointerdown', (event) => {
+			if (event.button !== 0) return;
+			pointerId = event.pointerId;
+			originX = event.clientX;
+			deltaX = 0;
+		});
+		viewport.addEventListener('pointermove', (event) => {
+			if (event.pointerId !== pointerId) return;
+			deltaX = event.clientX - originX;
+		});
+		const endPointer = (event: PointerEvent) => {
+			if (event.pointerId !== pointerId) return;
+			pointerId = null;
+			if (deltaX <= -48) {
+				suppressClick = true;
+				goNext();
+				start();
+			} else if (deltaX >= 48) {
+				suppressClick = true;
+				goPrev();
+				start();
+			}
+			deltaX = 0;
+		};
+		viewport.addEventListener('pointerup', endPointer);
+		viewport.addEventListener('pointercancel', endPointer);
+		viewport.addEventListener(
+			'click',
+			(event) => {
+				if (!suppressClick) return;
+				event.preventDefault();
+				event.stopPropagation();
+				suppressClick = false;
+			},
+			true,
+		);
+
+		start();
+	});
+</script>

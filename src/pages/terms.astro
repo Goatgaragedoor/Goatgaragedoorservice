@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { breadcrumbNode, pageSchema } from '../data/schema';
+import { site } from '../data/site';
+
+const updated = 'October 28, 2026';
+---
+
+<BaseLayout
+	title="Terms & Conditions | Goat Garage Door Service"
+	description="Terms for using the Goat Garage Door Service website and for requesting residential garage door repair or installation."
+	schema={pageSchema([
+		breadcrumbNode([
+			{ name: 'Home', path: '/' },
+			{ name: 'Terms & Conditions', path: '/terms' },
+		]),
+	])}
+>
+	<PageHero
+		title="Terms & Conditions"
+		lead="How this website works, and what a request for service means."
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Terms & Conditions' },
+		]}
+	/>
+	<section class="section">
+		<div class="container prose" style="max-width: 760px;">
+			<p>Last updated {updated}.</p>
+			<p>
+				These terms cover {site.domain.replace('https://', '')} and a request for garage door service from {site.name}.
+				We are based at {site.address.street}, {site.address.city}, {site.address.region} {site.address.postalCode}.
+				Using the site means you agree to these terms. If you do not, please leave the site and call or email instead.
+			</p>
+
+			<h2>Quotes and the work</h2>
+			<p>
+				The form asks for a free, no-obligation estimate. Sending it, or calling, does not hire us and does not lock in a price.
+				We look at the door, tell you what failed, and give you the price before the repair starts. You can decline.
+			</p>
+			<p>
+				A price covers the work we described. If we open the door and find a different problem — a second spring, a bad cable, a section that will not take a new seal — we stop and tell you before that extra work goes ahead.
+				Pages on this site describe typical jobs. They are not a quote for your door.
+			</p>
+
+			<h2>Scheduling and where we work</h2>
+			<p>
+				Hours are {site.hours}. Emergency calls are for a door that leaves the house open, traps the cars, or is hanging crooked.
+				Planned installs and other non-urgent work are scheduled when we follow up.
+			</p>
+			<p>
+				We serve Fishers, Indianapolis, and the surrounding towns listed on the service area pages. If a job is outside that area, we will say so before we come out.
+				Arrival times are estimates. Weather, traffic, and a door that is unsafe to leave can change the order of the day.
+			</p>
+
+			<h2>At the house</h2>
+			<p>Please have the following ready when we arrive:</p>
+			<ul>
+				<li>A clear path to the door, with cars and stored items moved off the tracks and the floor in front of the door</li>
+				<li>Someone 18 or older who can approve the price</li>
+				<li>Pets kept away from the work area</li>
+				<li>Power to the opener, unless you have already unplugged it because it is grinding or reversing on its own</li>
+			</ul>
+			<p>
+				Springs and cables are under tension. Please leave a broken spring, a loose cable, or a crooked door alone until we get there.
+				Do not wind a spring, pull the red release on a door the springs no longer balance, or keep cycling an opener that is straining.
+			</p>
+
+			<h2>Payment</h2>
+			<p>
+				Payment is due when the work we agreed on is finished, unless the written quote for that job says otherwise.
+				The quote or invoice for the visit is the record of the price, the parts, and any warranty we offered on that job.
+			</p>
+
+			<h2>Parts and warranties</h2>
+			<p>
+				Any warranty on labor or on a part we install is the warranty written on the quote or invoice for that job.
+				A manufacturer’s warranty, when one applies, comes from the part maker and follows that maker’s terms.
+				Descriptions, photos, and service pages on this website are not a warranty.
+			</p>
+
+			<h2>The website</h2>
+			<p>
+				Text, photos, and the logo belong to {site.name}. You may look at them and share a link to a page.
+				Please do not copy the photos, the logo, or page text for your own site or ads.
+			</p>
+			<p>
+				We try to keep the site accurate. Service descriptions can change, and a page can be out of date.
+				The site may be unavailable while it is updated or while the host has an outage.
+				Links to maps, Facebook, or other sites leave our site, and those sites have their own terms.
+			</p>
+			<p>
+				The service form is delivered through Netlify so we can read it. How we handle what you send is on the
+				<a href="/privacy">privacy policy</a>.
+			</p>
+
+			<h2>Liability</h2>
+			<p>
+				To the extent Indiana law allows, {site.name} is not liable for indirect or consequential damages from using this website, from a form that does not arrive, or from a delay in answering a request.
+				Nothing on this page limits liability that Indiana law does not allow a service business to limit.
+			</p>
+
+			<h2>Indiana law</h2>
+			<p>
+				These terms are governed by the laws of the State of Indiana. Disputes about the website or a request for service are handled in the state or federal courts located in Indiana.
+			</p>
+
+			<h2>Changes</h2>
+			<p>
+				We can update these terms by posting a new version on this page. The date at the top is the date of the current version.
+				A job already quoted keeps the terms we gave you with that quote.
+			</p>
+
+			<h2>Contact</h2>
+			<p>
+				Questions about these terms: call <a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a> or email
+				<a href={`mailto:${site.email}`}>{site.email}</a>.
+			</p>
+		</div>
+	</section>
+</BaseLayout>

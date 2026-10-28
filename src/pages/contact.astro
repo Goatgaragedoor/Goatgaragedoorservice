@@ -1,0 +1,217 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { breadcrumbNode, pageSchema } from '../data/schema';
+import { site } from '../data/site';
+import openerPhoto from '../assets/images/design/hero-opener.jpg';
+
+const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent('Fishers, IN')}&z=11&output=embed`;
+---
+
+<BaseLayout
+	title="Contact Goat Garage Door Service | Fishers, IN"
+	description="Request garage door service in Fishers or Indianapolis, or call 317-854-6917 any time. Goat Garage Door Service is open 24/7."
+	schema={pageSchema([
+		breadcrumbNode([
+			{ name: 'Home', path: '/' },
+			{ name: 'Contact', path: '/contact' },
+		]),
+	])}
+	showPhotoCta={false}
+>
+	<div class="contact-page">
+		<PageHero
+			variant="contact"
+			eyebrow="We're here to help"
+			title="Contact us"
+			lead="Have a question, need a quote, or dealing with a stuck door? Our team is ready to help. Call, text, or send us a message and we'll get back to you as soon as possible."
+		>
+			<ul class="contact-facts">
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M7 3.8h3.1l1.3 3.3-1.9 1.2a9.6 9.6 0 0 0 4.2 4.2l1.2-1.9 3.3 1.3v3.1a1.5 1.5 0 0 1-1.5 1.5A13.6 13.6 0 0 1 5.5 5.3 1.5 1.5 0 0 1 7 3.8z"></path>
+					</svg>
+					<span>
+						<span>Call or text</span>
+						<a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a>
+					</span>
+				</li>
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<circle cx="12" cy="12" r="8"></circle>
+						<path d="M12 8v4.2l2.6 1.6"></path>
+					</svg>
+					<span>
+						<span>Available</span>
+						<strong>{site.hours}</strong>
+					</span>
+				</li>
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M12 3.4 5.4 6.1v5.7c0 3.9 2.7 6.6 6.6 8.4 3.9-1.8 6.6-4.5 6.6-8.4V6.1z"></path>
+					</svg>
+					<span>
+						<span>Trusted local</span>
+						<strong>Technicians</strong>
+					</span>
+				</li>
+			</ul>
+		</PageHero>
+
+		<section class="section contact-main" id="message">
+			<div class="container contact-layout">
+				<QuoteForm variant="contact" />
+				<aside class="contact-panel" aria-labelledby="contact-panel-title">
+					<p class="eyebrow">Contact information</p>
+					<h2 id="contact-panel-title">Get in touch</h2>
+					<ul class="contact-list">
+						<li>
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<path d="M7 3.8h3.1l1.3 3.3-1.9 1.2a9.6 9.6 0 0 0 4.2 4.2l1.2-1.9 3.3 1.3v3.1a1.5 1.5 0 0 1-1.5 1.5A13.6 13.6 0 0 1 5.5 5.3 1.5 1.5 0 0 1 7 3.8z"></path>
+							</svg>
+							<span>Phone</span>
+							<a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a>
+						</li>
+						<li>
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<rect x="3.5" y="5.5" width="17" height="13" rx="1.6"></rect>
+								<path d="m4.5 7.2 7.5 5.6 7.5-5.6"></path>
+							</svg>
+							<span>Email</span>
+							<a href={`mailto:${site.email}`}>{site.email}</a>
+						</li>
+						<li>
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10z"></path>
+								<circle cx="12" cy="11" r="2.1"></circle>
+							</svg>
+							<span>Address</span>
+							<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+								{site.address.street}<br />
+								{site.address.city}, {site.address.region} {site.address.postalCode}
+							</a>
+						</li>
+						<li>
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<circle cx="12" cy="12" r="8"></circle>
+								<path d="M12 8v4.2l2.6 1.6"></path>
+							</svg>
+							<span>Hours</span>
+							<strong>{site.hours} Emergency Service</strong>
+						</li>
+						<li>
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<path d="M14.2 20.5v-6.6h2.3l.4-2.6h-2.7V9.6c0-.8.2-1.3 1.4-1.3h1.5V5.8c-.2 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.6v1.9H9.2v2.6h2.2v6.7h2.8z"></path>
+							</svg>
+							<span>Facebook</span>
+							<a href={site.facebook} target="_blank" rel="noopener noreferrer">Goat Garage Door Service</a>
+						</li>
+					</ul>
+					<a class="contact-now" href={`tel:${site.phoneTel}`}>
+						<span class="contact-now-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24">
+								<path d="M7 3.8h3.1l1.3 3.3-1.9 1.2a9.6 9.6 0 0 0 4.2 4.2l1.2-1.9 3.3 1.3v3.1a1.5 1.5 0 0 1-1.5 1.5A13.6 13.6 0 0 1 5.5 5.3 1.5 1.5 0 0 1 7 3.8z"></path>
+							</svg>
+						</span>
+						<span>
+							<strong>Prefer to talk now?</strong>
+							<span>Call us any time, we're available 24/7.</span>
+						</span>
+						<span class="contact-now-arrow" aria-hidden="true">→</span>
+					</a>
+				</aside>
+			</div>
+		</section>
+
+		<section class="section contact-area" aria-labelledby="contact-area-title">
+			<div class="container contact-area-grid">
+				<div class="contact-map">
+					<iframe
+						class="map-frame"
+						title="Map of Fishers, Indianapolis, and the surrounding service area"
+						src={mapSrc}
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"
+					></iframe>
+					<a class="contact-map-badge" href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10z"></path>
+							<circle cx="12" cy="11" r="2.1"></circle>
+						</svg>
+						<span>
+							<span>Proudly serving</span>
+							<strong>Fishers and the surrounding area</strong>
+						</span>
+					</a>
+				</div>
+				<div class="contact-area-copy">
+					<p class="band-kicker">Our service area</p>
+					<h2 id="contact-area-title">Fishers and the Indianapolis area</h2>
+					<p>
+						We provide garage door repair, installation, and maintenance throughout Fishers, Indianapolis, and the surrounding communities.
+					</p>
+					<a class="btn btn-line" href="/service-areas">View all service areas <span aria-hidden="true">→</span></a>
+				</div>
+			</div>
+		</section>
+
+		<section class="contact-trust" aria-label="Why call Goat">
+			<ul class="container">
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M4.5 13v-1a7.5 7.5 0 0 1 15 0v1"></path>
+						<path d="M4.5 13h2.2V18H6a1.6 1.6 0 0 1-1.5-1.6zM19.5 13H17.3V18H18a1.6 1.6 0 0 0 1.5-1.6z"></path>
+					</svg>
+					<strong>Real people</strong>
+					<span>Talk to a local technician, not a call center.</span>
+				</li>
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<circle cx="12" cy="12" r="8"></circle>
+						<path d="M12 8v4.2l2.6 1.6"></path>
+					</svg>
+					<strong>Fast response</strong>
+					<span>We'll get back to you quickly.</span>
+				</li>
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10z"></path>
+						<circle cx="12" cy="11" r="2.1"></circle>
+					</svg>
+					<strong>Local &amp; reliable</strong>
+					<span>Proudly serving Fishers and the greater Indianapolis area.</span>
+				</li>
+				<li>
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M12 3.4 5.4 6.1v5.7c0 3.9 2.7 6.6 6.6 8.4 3.9-1.8 6.6-4.5 6.6-8.4V6.1z"></path>
+						<path d="m9 12.1 2 2 4-4.2"></path>
+					</svg>
+					<strong>Upfront pricing</strong>
+					<span>Get the price before any work begins.</span>
+				</li>
+			</ul>
+		</section>
+
+		<section class="contact-closer" aria-labelledby="contact-closer-title">
+			<img
+				class="contact-closer-media"
+				src={openerPhoto.src}
+				width={openerPhoto.width}
+				height={openerPhoto.height}
+				alt=""
+				loading="lazy"
+				decoding="async"
+			/>
+			<div class="contact-closer-shade"></div>
+			<div class="container contact-closer-copy">
+				<p class="eyebrow">Still have questions?</p>
+				<h2 id="contact-closer-title">We're just<br />a call away</h2>
+				<p>Our team is happy to help with any questions about your garage door.</p>
+				<div class="hero-actions">
+					<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+				</div>
+			</div>
+		</section>
+	</div>
+</BaseLayout>

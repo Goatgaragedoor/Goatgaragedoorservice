@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+	title="Page not found | Goat Garage Door Service"
+	description="That page is not on the Goat Garage Door Service site. Call 317-854-6917 for garage door repair in Fishers and Indianapolis."
+	noindex
+>
+	<section class="not-found">
+		<div class="container">
+			<p class="eyebrow">404</p>
+			<h1>That page moved.</h1>
+			<p>Try the service list, or call {site.phoneDisplay} if the door will not wait.</p>
+			<div class="stack-actions">
+				<a class="btn btn-navy" href="/">Home</a>
+				<a class="btn btn-line" href="/services">Services</a>
+				<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>

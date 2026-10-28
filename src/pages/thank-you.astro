@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+	title="Request received | Goat Garage Door Service"
+	description="Your garage door service request was sent to Goat Garage Door Service. Call 317-854-6917 if the door is stuck."
+	noindex
+>
+	<section class="thank-you">
+		<div class="container">
+			<p class="eyebrow">Request received</p>
+			<h1>We have it.</h1>
+			<p>Your note is in. If the door is stuck open or the cars are trapped, call and do not wait on a reply.</p>
+			<div class="stack-actions">
+				<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+				<a class="btn btn-line" href="/">Back home</a>
+			</div>
+		</div>
+	</section>
+</BaseLayout>

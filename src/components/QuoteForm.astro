@@ -1,0 +1,181 @@
+---
+import { services } from '../data/services';
+import { routePath } from '../data/site';
+
+interface Props {
+	heading?: string;
+	intro?: string;
+	selectedSlug?: string;
+	submitLabel?: string;
+	variant?: 'hero' | 'page' | 'contact';
+	city?: string;
+}
+
+const {
+	heading = 'Request a free estimate',
+	intro = 'No-obligation price before any work is done. If the door is stuck open, call instead of waiting on a form.',
+	selectedSlug,
+	submitLabel,
+	variant = 'page',
+	city,
+} = Astro.props;
+
+const hero = variant === 'hero';
+const contact = variant === 'contact';
+const selected = services.find((service) => service.slug === selectedSlug);
+---
+
+<form
+	class:list={['form-card', { 'is-hero': hero, 'is-contact': contact }]}
+	name="service-request"
+	method="POST"
+	action="/thank-you"
+	data-netlify="true"
+	netlify-honeypot="bot-field"
+>
+	<input type="hidden" name="form-name" value="service-request" />
+	<input type="hidden" name="page" value={routePath(Astro.url.pathname)} />
+	<p class="hp" aria-hidden="true">
+		<label>
+			Don’t fill this out if you’re human
+			<input name="bot-field" tabindex="-1" autocomplete="off" />
+		</label>
+	</p>
+	{
+		hero ? (
+			<header class="form-head">
+				<h2>Get a Free Quote</h2>
+				<p>Fast. Friendly. No-obligation estimates.</p>
+			</header>
+		) : contact ? (
+			<>
+				<p class="eyebrow">Request a free estimate</p>
+				<h2>Send us a message</h2>
+				<p class="form-note">Fill out the form below and we'll get back to you shortly.</p>
+			</>
+		) : (
+			<>
+				<h2>{heading}</h2>
+				<p class="form-note">{intro}</p>
+			</>
+		)
+	}
+	<div class="form-grid">
+		<label class="field">
+			<span>Full Name<span class="req" aria-hidden="true">*</span></span>
+			<input name="name" type="text" autocomplete="name" required placeholder="Full Name" />
+		</label>
+		<label class="field">
+			<span>Phone<span class="req" aria-hidden="true">*</span></span>
+			<input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="Phone" />
+		</label>
+		<label class:list={['field', { 'field-wide': !contact }]}>
+			<span>
+				Email
+				{contact && <span class="req" aria-hidden="true">*</span>}
+			</span>
+			<input name="email" type="email" autocomplete="email" placeholder="Email" required={contact} />
+		</label>
+		<label class:list={['field', { 'field-wide': !contact, 'field-extra': hero }]}>
+			<span>City</span>
+			<input
+				name="city"
+				type="text"
+				autocomplete="address-level2"
+				value={city}
+				placeholder={contact ? 'City' : undefined}
+			/>
+		</label>
+		<label class="field field-wide">
+			<span>{hero ? 'What do you need help with?' : 'Service'}</span>
+			<div class="select">
+				<select name="service" required tabindex="-1" aria-hidden="true">
+					<option value="" disabled selected={!selected}>
+						What do you need help with?
+					</option>
+					{
+						services.map((service) => (
+							<option value={service.title} selected={service.slug === selectedSlug}>
+								{service.title}
+							</option>
+						))
+					}
+				</select>
+				<button
+					class:list={['select-face', { 'is-placeholder': !selected }]}
+					type="button"
+					aria-haspopup="listbox"
+					aria-expanded="false"
+				>
+					<span>{selected?.title ?? 'What do you need help with?'}</span>
+				</button>
+				<ul class="select-menu" role="listbox" hidden>
+					{
+						services.map((service) => (
+							<li role="presentation">
+								<button type="button" role="option" data-value={service.title} aria-selected={service.slug === selectedSlug}>
+									{service.title}
+								</button>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</label>
+		<label class="field field-wide">
+			<span>{contact ? 'Tell us more (optional)' : 'Tell us more'}</span>
+			<textarea
+				name="message"
+				rows={contact ? 5 : hero ? 3 : 4}
+				placeholder={contact ? 'Tell us more about your garage door issue...' : 'Tell us more (optional)'}
+			></textarea>
+		</label>
+	</div>
+	<button class="btn btn-orange" type="submit">
+		{submitLabel ?? (hero ? 'Get My Free Quote →' : contact ? 'Send Message →' : 'Request an estimate')}
+	</button>
+	{hero && <p class="form-assure">Your information is never shared.</p>}
+</form>
+
+<script>
+	document.querySelectorAll('.select').forEach((root) => {
+		const native = root.querySelector('select');
+		const face = root.querySelector('.select-face');
+		const label = face?.querySelector('span');
+		const menu = root.querySelector('.select-menu');
+		if (!(native instanceof HTMLSelectElement) || !(face instanceof HTMLButtonElement) || !label || !menu) return;
+
+		const close = () => {
+			menu.hidden = true;
+			face.setAttribute('aria-expanded', 'false');
+			root.classList.remove('is-open');
+		};
+
+		face.addEventListener('click', () => {
+			const open = menu.hidden;
+			menu.hidden = !open;
+			face.setAttribute('aria-expanded', String(open));
+			root.classList.toggle('is-open', open);
+		});
+
+		menu.querySelectorAll('button').forEach((option) => {
+			option.addEventListener('click', () => {
+				if (!(option instanceof HTMLButtonElement)) return;
+				native.value = option.dataset.value ?? '';
+				label.textContent = option.textContent;
+				face.classList.remove('is-placeholder');
+				menu.querySelectorAll('button').forEach((item) => item.removeAttribute('aria-selected'));
+				option.setAttribute('aria-selected', 'true');
+				close();
+			});
+		});
+
+		document.addEventListener('click', (event) => {
+			if (!root.contains(event.target as Node)) close();
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape') close();
+		});
+	});
+</script>

@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { breadcrumbNode, pageSchema } from '../data/schema';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+	title="Privacy | Goat Garage Door Service"
+	description="How Goat Garage Door Service handles information sent through the service request form."
+	schema={pageSchema([
+		breadcrumbNode([
+			{ name: 'Home', path: '/' },
+			{ name: 'Privacy', path: '/privacy' },
+		]),
+	])}
+>
+	<PageHero
+		title="Privacy"
+		lead="What happens to the details you send with a service request."
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Privacy' },
+		]}
+	/>
+	<section class="section">
+		<div class="container prose" style="max-width: 760px;">
+			<p>
+				The service form asks for your name, phone number, the city, the kind of job, and what the door is doing.
+				Email is optional. We use that information to call or write you back about garage door service.
+			</p>
+			<p>
+				Submissions are delivered through our website host, Netlify, which stores the form so {site.name} can read it.
+				We do not sell this information. We do not use it for a mailing list.
+			</p>
+			<p>
+				You can also skip the form and call {site.phoneDisplay} or email
+				<a href={`mailto:${site.email}`}>{site.email}</a>. To ask about a request you already sent, use that same phone or email.
+			</p>
+			<p>We are based at {site.address.street}, {site.address.city}, {site.address.region} {site.address.postalCode}.</p>
+			<p>
+				How the site and a service request work is covered in the <a href="/terms">terms and conditions</a>.
+			</p>
+		</div>
+	</section>
+</BaseLayout>

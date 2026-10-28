@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OfferCarousel from '../../components/OfferCarousel.astro';
+import PageHero from '../../components/PageHero.astro';
+import { areas } from '../../data/areas';
+import { breadcrumbNode, faqNode, pageSchema } from '../../data/schema';
+import { site } from '../../data/site';
+
+const faqs = [
+	{
+		q: 'Which service should I pick?',
+		a: 'If you know the part — a spring, a cable, a seal, a panel, or the opener — open that page. If you only know the noise, or that the door stopped, start with repair or call and describe what it did.',
+	},
+	{
+		q: 'When do I get the price?',
+		a: 'Before the repair starts. We look at the door, tell you what failed, and give you the price. You can decline. If we find a second problem, we stop and tell you before that extra work goes ahead.',
+	},
+	{
+		q: 'Do you answer at night?',
+		a: `Yes. Hours are ${site.hours}, including weekends and holidays. Call ${site.phoneDisplay} if the door is stuck. A planned install can go through the form.`,
+	},
+	{
+		q: 'Do you repair every brand?',
+		a: 'We repair the standard residential systems around Indianapolis: sectional steel doors, torsion springs, and the common opener brands. If the door is unusual, send a photo and we will tell you before the drive.',
+	},
+	{
+		q: 'What if more than one thing is wrong?',
+		a: 'We list what we find. A noisy door might only need rollers. The same door might also have a spring near the end of its life. You choose what to do on that visit.',
+	},
+	{
+		q: 'Which towns do you cover?',
+		a: 'Fishers, Indianapolis, and the towns in the list above: Carmel, Noblesville, Westfield, Lawrence, McCordsville, Zionsville, Greenwood, Anderson, Brownsburg, and Greenfield. If a job is outside that area, we say so before we come out.',
+	},
+];
+---
+
+<BaseLayout
+	title="Garage Door Services in Fishers, IN | Goat Garage Door Service"
+	description="Garage door repair, installation, springs, cables, openers, panels, seals, and maintenance in Fishers and Indianapolis. Call 317-854-6917."
+	schema={pageSchema([
+		breadcrumbNode([
+			{ name: 'Home', path: '/' },
+			{ name: 'Services', path: '/services' },
+		]),
+		faqNode(faqs),
+	])}
+>
+	<PageHero
+		eyebrow="Fishers & Indianapolis"
+		title="Garage door services"
+		lead="Repair, replacement, and new doors. Pick the job that matches the door, or call and describe the noise."
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Services' },
+		]}
+	/>
+	<OfferCarousel quoteHref="/contact" showMore={false} />
+
+	<section class="places" aria-labelledby="places-title">
+		<div class="container places-layout">
+			<div class="places-copy">
+				<p class="band-kicker">Service areas</p>
+				<h2 id="places-title">Fishers and the<br />towns around it</h2>
+				<p>
+					We provide garage door repair, installation, and maintenance throughout Fishers, Indianapolis, and the surrounding communities.
+				</p>
+				<a class="btn btn-orange places-all" href="/service-areas">
+					View all areas
+					<span aria-hidden="true">→</span>
+				</a>
+			</div>
+			<div class="place-grid">
+				{
+					areas.map((area) => (
+						<a class="place-card" href={`/service-areas/${area.slug}`}>
+							<span class="place-name">
+								<strong>{area.name}</strong>
+								<span>{area.county}</span>
+							</span>
+							<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
+								<path
+									fill="currentColor"
+									fill-rule="evenodd"
+									d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+								/>
+							</svg>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<section class="faqs" aria-labelledby="faqs-title">
+		<div class="container faqs-layout">
+			<div class="faqs-copy">
+				<p class="band-kicker">Questions</p>
+				<h2 id="faqs-title">
+					Before<br />
+					you<br />
+					<span>call.</span>
+				</h2>
+				<p>Hours, the price, and which service matches the door.</p>
+				<a class="btn btn-orange faqs-call" href={`tel:${site.phoneTel}`}>Call now</a>
+			</div>
+			<div class="faq-list">
+				{
+					faqs.map((faq, index) => (
+						<details>
+							<summary>
+								<span class="faq-index" aria-hidden="true">
+									{String(index + 1).padStart(2, '0')}
+								</span>
+								<span class="faq-q">{faq.q}</span>
+							</summary>
+							<p>{faq.a}</p>
+						</details>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</BaseLayout>

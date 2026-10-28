@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import type { Service } from '../data/services';
+import { workById } from '../data/work';
+
+interface Props {
+	service: Service;
+	index: number;
+}
+
+const { service } = Astro.props;
+const photo = workById(service.imageId);
+---
+
+<a class="svc-card" href={`/services/${service.slug}`}>
+	<span class="svc-card-media">
+		<Image
+			src={photo.src}
+			alt=""
+			widths={[480, 720]}
+			sizes="(min-width: 980px) 340px, (min-width: 640px) 50vw, 100vw"
+			quality={86}
+		/>
+	</span>
+	<span class="svc-card-body">
+		<strong>{service.title.replace('Garage Door ', '')}</strong>
+		<em>{service.card}</em>
+		<span class="svc-more">Learn More</span>
+	</span>
+</a>

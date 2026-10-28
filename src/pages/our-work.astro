@@ -1,0 +1,76 @@
+---
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { work, workCategories } from '../data/work';
+import { breadcrumbNode, pageSchema } from '../data/schema';
+
+const photos = await Promise.all(
+	work.map(async (item) => {
+		const full = await getImage({
+			src: item.src,
+			width: Math.min(item.src.width, 1800),
+			quality: 86,
+		});
+		return { ...item, full: full.src };
+	}),
+);
+---
+
+<BaseLayout
+	title="Garage Door Projects | Goat Garage Door Service"
+	description="Photos of garage door spring replacements, new door installations, opener work, and repairs by Goat Garage Door Service in Fishers and Indianapolis."
+	schema={pageSchema([
+		breadcrumbNode([
+			{ name: 'Home', path: '/' },
+			{ name: 'Our work', path: '/our-work' },
+		]),
+	])}
+>
+	<PageHero
+		eyebrow="Fishers & Indianapolis jobs"
+		title="Our work"
+		lead="Springs, new doors, openers, and hardware repairs from recent visits. Filter by the kind of job."
+		crumbs={[
+			{ label: 'Home', href: '/' },
+			{ label: 'Our work' },
+		]}
+	/>
+	<section class="built">
+		<div class="container-wide work-board">
+			<div class="filter-bar" role="radiogroup" aria-label="Filter projects">
+				<label>
+					<input type="radio" name="work-filter" checked />
+					All
+				</label>
+				{
+					workCategories.map((category) => (
+						<label>
+							<input type="radio" name="work-filter" data-filter={category.id} />
+							{category.label}
+						</label>
+					))
+				}
+			</div>
+			<div class="work-grid">
+				{
+					photos.map((item) => (
+						<figure data-category={item.category}>
+							<button
+								type="button"
+								class="work-photo"
+								data-photo
+								data-gallery="work"
+								data-full={item.full}
+								data-caption={item.place ? `${item.title} · ${item.place}` : item.title}
+								aria-label={`Open photo: ${item.alt}`}
+							>
+								<Image src={item.src} alt={item.alt} widths={[480, 768]} sizes="(min-width: 900px) 360px, 100vw" quality={86} />
+							</button>
+						</figure>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</BaseLayout>

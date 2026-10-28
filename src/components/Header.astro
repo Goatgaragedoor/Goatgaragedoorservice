@@ -1,0 +1,192 @@
+---
+import { Image } from 'astro:assets';
+import { areas } from '../data/areas';
+import { services } from '../data/services';
+import { routePath, site } from '../data/site';
+import logo from '../assets/images/logo-mark-light.png';
+
+const path = routePath(Astro.url.pathname);
+
+function current(href: string) {
+	if (href === '/') return path === '/' ? 'page' : undefined;
+	return path === href || path.startsWith(`${href}/`) ? 'page' : undefined;
+}
+---
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="scroll-progress" aria-hidden="true"><span></span></div>
+<div class="sticky-head">
+	<header class="site-header">
+		<div class="header-inner">
+			<a class="logo" href="/" aria-label={site.name}>
+				<Image src={logo} alt="" width={168} height={184} densities={[1, 2]} quality={90} />
+			</a>
+			<nav id="site-nav" class="site-nav" aria-label="Primary">
+				<a href="/" aria-current={current('/')}>Home</a>
+				<a href="/about" aria-current={current('/about')}>About</a>
+				<div class="nav-drop">
+					<a href="/services" aria-current={current('/services')}>Services</a>
+					<button
+						class="nav-subtoggle"
+						type="button"
+						aria-expanded="false"
+						aria-controls="nav-services"
+						data-label-closed="Show services"
+						data-label-open="Hide services"
+					>
+						<span class="sr-only">Show services</span>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M6 9.5 12 15.5l6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+					<ul id="nav-services">
+						{
+							services.map((service) => (
+								<li>
+									<a href={`/services/${service.slug}`} aria-current={current(`/services/${service.slug}`)}>
+										{service.title}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+				<div class="nav-drop">
+					<a href="/service-areas" aria-current={current('/service-areas')}>Service Areas</a>
+					<button
+						class="nav-subtoggle"
+						type="button"
+						aria-expanded="false"
+						aria-controls="nav-areas"
+						data-label-closed="Show service areas"
+						data-label-open="Hide service areas"
+					>
+						<span class="sr-only">Show service areas</span>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M6 9.5 12 15.5l6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+					<ul id="nav-areas">
+						{
+							areas.map((area) => (
+								<li>
+									<a href={`/service-areas/${area.slug}`} aria-current={current(`/service-areas/${area.slug}`)}>
+										{area.name}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+				<a href="/our-work" aria-current={current('/our-work')}>Our Work</a>
+				<a href="/contact" aria-current={current('/contact')}>Contact</a>
+			</nav>
+			<a class="btn btn-orange header-quote" href={`tel:${site.phoneTel}`}>Call now</a>
+			<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+				<span class="sr-only">Open menu</span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+		</div>
+	</header>
+</div>
+<button class="to-top" type="button" aria-label="Scroll to top" hidden>
+	<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+		<path d="M6 14.5 12 8.5l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+	</svg>
+</button>
+
+<script>
+	const toggle = document.querySelector('.nav-toggle');
+	const nav = document.querySelector('#site-nav');
+	const head = document.querySelector('.sticky-head');
+	const progress = document.querySelector('.scroll-progress span');
+	const toTop = document.querySelector('.to-top');
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	const syncHead = () => {
+		const open = document.body.classList.contains('nav-open');
+		const scrolled = window.scrollY > 12;
+		head?.classList.toggle('is-solid', open || scrolled);
+	};
+
+	const syncScroll = () => {
+		const max = document.documentElement.scrollHeight - window.innerHeight;
+		const amount = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+		if (progress instanceof HTMLElement) progress.style.transform = `scaleX(${amount})`;
+		if (toTop instanceof HTMLButtonElement) toTop.hidden = window.scrollY < 480;
+	};
+
+	const closeDrops = () => {
+		nav?.querySelectorAll('.nav-drop').forEach((drop) => {
+			drop.classList.remove('is-open');
+			const button = drop.querySelector('.nav-subtoggle');
+			if (!(button instanceof HTMLButtonElement)) return;
+			button.setAttribute('aria-expanded', 'false');
+			const label = button.querySelector('.sr-only');
+			if (label) label.textContent = button.dataset.labelClosed ?? 'Show submenu';
+		});
+	};
+
+	const setOpen = (open: boolean) => {
+		if (!open) {
+			closeDrops();
+			if (nav instanceof HTMLElement) nav.scrollTop = 0;
+		}
+		document.body.classList.toggle('nav-open', open);
+		toggle?.setAttribute('aria-expanded', String(open));
+		const label = toggle?.querySelector('.sr-only');
+		if (label) label.textContent = open ? 'Close menu' : 'Open menu';
+		syncHead();
+	};
+
+	let frame = 0;
+	const onScroll = () => {
+		if (frame) return;
+		frame = requestAnimationFrame(() => {
+			frame = 0;
+			syncHead();
+			syncScroll();
+		});
+	};
+
+	syncHead();
+	syncScroll();
+	window.addEventListener('scroll', onScroll, { passive: true });
+	window.addEventListener('resize', onScroll);
+
+	toTop?.addEventListener('click', () => {
+		window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+	});
+
+	toggle?.addEventListener('click', () => {
+		setOpen(!document.body.classList.contains('nav-open'));
+	});
+
+	nav?.querySelectorAll('.nav-subtoggle').forEach((button) => {
+		if (!(button instanceof HTMLButtonElement)) return;
+		button.addEventListener('click', () => {
+			const drop = button.closest('.nav-drop');
+			if (!drop) return;
+			const open = !drop.classList.contains('is-open');
+			drop.classList.toggle('is-open', open);
+			button.setAttribute('aria-expanded', String(open));
+			const label = button.querySelector('.sr-only');
+			if (label) label.textContent = open ? (button.dataset.labelOpen ?? 'Hide submenu') : (button.dataset.labelClosed ?? 'Show submenu');
+		});
+	});
+
+	nav?.querySelectorAll('a').forEach((link) => {
+		link.addEventListener('click', () => setOpen(false));
+	});
+
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') setOpen(false);
+	});
+
+	const desktop = window.matchMedia('(min-width: 901px)');
+	desktop.addEventListener('change', () => {
+		if (desktop.matches) setOpen(false);
+	});
+</script>
