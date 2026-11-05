@@ -50,7 +50,7 @@ const offerIconBySlug: Record<string, string> = {
 
 const offer = services.map((service) => ({
 	slug: service.slug,
-	title: service.title.replace('Garage Door ', ''),
+	title: service.title,
 	text: service.card,
 	icon: offerIconBySlug[service.slug] ?? offerIcons.repair,
 	image: workById(service.imageId),
@@ -92,7 +92,7 @@ const offer = services.map((service) => ({
 								</span>
 								<span class="offer-copy">
 									<Fragment set:html={item.icon} />
-									<strong>{item.title}</strong>
+									<h3>{item.title}</h3>
 									<span>{item.text}</span>
 									<span class="offer-more">Learn more</span>
 								</span>

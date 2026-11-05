@@ -401,6 +401,9 @@ const faqs = [
 			}
 			.rlg-close:hover { color: #374151; }
 			.rlg-review-container { text-align: center; }
+			.rlg-review-container > h3 {
+				font-size: 1.5rem;
+			}
 			.rlg-review-container > p {
 				font-size: 15px;
 				color: #6b7280;
@@ -889,7 +892,7 @@ const faqs = [
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Recent projects</p>
-				<p class="ui-heading" id="built-title">Built to last</p>
+				<div class="ui-heading" id="built-title">Built to last</div>
 				<a class="band-more" href="/our-work">View all projects</a>
 			</div>
 			<ProjectCarousel gallery="home-projects" />
@@ -900,7 +903,7 @@ const faqs = [
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Questions</p>
-				<p class="ui-heading" id="faq-title">Before you call</p>
+				<div class="ui-heading" id="faq-title">Before you call</div>
 			</div>
 			<div class="faq">
 				{

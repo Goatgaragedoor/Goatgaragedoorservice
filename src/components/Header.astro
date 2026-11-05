@@ -7,6 +7,22 @@ import logo from '../assets/images/logo-mark-light.png';
 
 const path = routePath(Astro.url.pathname);
 
+const commercialSlug = 'commercial-garage-door-repair-installation';
+const servicesAlpha = [...services].sort((a, b) => a.title.localeCompare(b.title));
+const servicesSorted = [
+	...servicesAlpha.filter((service) => service.slug !== commercialSlug),
+	...servicesAlpha.filter((service) => service.slug === commercialSlug),
+];
+
+const areaTopSlugs = ['carmel', 'fortville'];
+const areasAlpha = [...areas].sort((a, b) => a.name.localeCompare(b.name));
+const areasSorted = [
+	...areaTopSlugs
+		.map((slug) => areasAlpha.find((area) => area.slug === slug))
+		.filter((area) => area !== undefined),
+	...areasAlpha.filter((area) => !areaTopSlugs.includes(area.slug)),
+];
+
 function current(href: string) {
 	if (href === '/') return path === '/' ? 'page' : undefined;
 	return path === href || path.startsWith(`${href}/`) ? 'page' : undefined;
@@ -41,7 +57,7 @@ function current(href: string) {
 					</button>
 					<ul id="nav-services">
 						{
-							services.map((service) => (
+							servicesSorted.map((service) => (
 								<li>
 									<a href={`/services/${service.slug}`} aria-current={current(`/services/${service.slug}`)}>
 										{service.title}
@@ -68,7 +84,7 @@ function current(href: string) {
 					</button>
 					<ul id="nav-areas">
 						{
-							areas.map((area) => (
+							areasSorted.map((area) => (
 								<li>
 									<a href={`/service-areas/${area.slug}`} aria-current={current(`/service-areas/${area.slug}`)}>
 										{area.name}

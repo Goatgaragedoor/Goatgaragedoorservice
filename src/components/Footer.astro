@@ -27,7 +27,7 @@ const footerServices = [
 			</p>
 		</div>
 		<div class="footer-col footer-links">
-			<p class="ui-heading">Quick Links</p>
+			<div class="ui-heading">Quick Links</div>
 			<ul>
 				<li><a href="/">Home</a></li>
 				<li><a href="/about">About</a></li>
@@ -38,19 +38,19 @@ const footerServices = [
 			</ul>
 		</div>
 		<div class="footer-col footer-services">
-			<p class="ui-heading">Our Services</p>
+			<div class="ui-heading">Our Services</div>
 			<ul>
 				{
 					footerServices.map((service) => (
 						<li>
-							<a href={`/services/${service.slug}`}>{service.title.replace('Garage Door ', '')}</a>
+							<a href={`/services/${service.slug}`}>{service.title}</a>
 						</li>
 					))
 				}
 			</ul>
 		</div>
 		<div>
-			<p class="ui-heading">Contact Us</p>
+			<div class="ui-heading">Contact Us</div>
 			<ul class="footer-contact">
 				<li>
 					<a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a>
@@ -59,9 +59,12 @@ const footerServices = [
 					<a href={`mailto:${site.email}`}>{site.email}</a>
 				</li>
 				<li>
-					{site.address.street}<br />
-					{site.address.city}, {site.address.region} {site.address.postalCode}
+					<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+						{site.address.street}<br />
+						{site.address.city}, {site.address.region} {site.address.postalCode}
+					</a>
 				</li>
+				<li>Open {site.hours}</li>
 			</ul>
 			<div class="footer-social">
 				<p>Find us on social media</p>
