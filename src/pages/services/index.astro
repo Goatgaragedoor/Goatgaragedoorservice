@@ -3,7 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import OfferCarousel from '../../components/OfferCarousel.astro';
 import PageHero from '../../components/PageHero.astro';
 import { areas } from '../../data/areas';
-import { breadcrumbNode, faqNode, pageSchema } from '../../data/schema';
 import { site } from '../../data/site';
 
 const faqs = [
@@ -35,15 +34,8 @@ const faqs = [
 ---
 
 <BaseLayout
-	title="Garage Door Services in Fishers, IN | Goat Garage Door Service"
+	title="Garage Door Services in Fishers - Goat Garage Door Service"
 	description="Garage door repair, installation, springs, cables, openers, panels, seals, and maintenance in Fishers and Indianapolis. Call 317-854-6917."
-	schema={pageSchema([
-		breadcrumbNode([
-			{ name: 'Home', path: '/' },
-			{ name: 'Services', path: '/services' },
-		]),
-		faqNode(faqs),
-	])}
 >
 	<PageHero
 		eyebrow="Fishers & Indianapolis"
@@ -88,6 +80,19 @@ const faqs = [
 					))
 				}
 			</div>
+		</div>
+		<div class="container places-map">
+			<iframe
+				class="map-frame"
+				title="Goat Garage Door Service on Google Maps"
+				src={site.mapEmbed}
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"
+				allowfullscreen
+			></iframe>
+			<p>
+				<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
+			</p>
 		</div>
 	</section>
 

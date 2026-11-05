@@ -1,21 +1,25 @@
 ---
+import { Image } from 'astro:assets';
 import { site } from '../data/site';
 import designInstall from '../assets/images/design/design-install.jpg';
 ---
 
 <section class="photo-cta" aria-labelledby="photo-cta-title">
-	<img
+	<Image
 		class="photo-cta-media"
-		src={designInstall.src}
-		width={designInstall.width}
-		height={designInstall.height}
+		src={designInstall}
+		widths={[768, 1024, 1536]}
+		sizes="100vw"
+		format="webp"
+		quality={82}
 		alt="Carriage-house garage door lit at dusk"
+		title="Carriage-house garage door lit at dusk"
 		loading="lazy"
 		decoding="async"
 	/>
 	<div class="photo-cta-copy">
 		<p class="band-kicker">On call today</p>
-		<h2 id="photo-cta-title">Need the door working?</h2>
+		<p class="ui-heading" id="photo-cta-title">Need the door working?</p>
 		<p>Call any hour, or send a note. The price comes before the work starts.</p>
 		<div class="hero-actions">
 			<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>

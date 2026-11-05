@@ -16,7 +16,7 @@ const photo = workById(service.imageId);
 	<span class="svc-card-media">
 		<Image
 			src={photo.src}
-			alt=""
+			alt={photo.alt} title={photo.title}
 			widths={[480, 720]}
 			sizes="(min-width: 980px) 340px, (min-width: 640px) 50vw, 100vw"
 			quality={86}

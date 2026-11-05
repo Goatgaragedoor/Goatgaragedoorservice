@@ -5,8 +5,11 @@ import OfferCarousel from '../../components/OfferCarousel.astro';
 import PageHero from '../../components/PageHero.astro';
 import { getService, services } from '../../data/services';
 import { workById } from '../../data/work';
-import { breadcrumbNode, faqNode, pageSchema, serviceNode } from '../../data/schema';
+import { breadcrumbNode, faqNode, graphSchema, serviceNode } from '../../data/schema';
 import { site } from '../../data/site';
+import { areas } from '../../data/areas';
+import { googleReviews } from '../../data/reviews';
+import goatHead from '../../assets/images/goat-head.png';
 
 export function getStaticPaths() {
 	return services.map((service) => ({
@@ -34,7 +37,13 @@ const photoFocus: Record<string, string> = {
 };
 const focus = photoFocus[service.imageId] ?? 'center center';
 
-const schema = pageSchema([
+const seoSections = service.seoSections ?? [];
+const seoFirst = seoSections[0];
+const seoRest = seoSections.slice(1);
+const seoFirstPhoto = seoFirst && seoFirst.imageId ? workById(seoFirst.imageId) : null;
+const optimized = seoSections.length > 0;
+
+const schema = graphSchema([
 	serviceNode(service),
 	faqNode(service.faqs),
 	breadcrumbNode([
@@ -45,10 +54,14 @@ const schema = pageSchema([
 ]);
 ---
 
-<BaseLayout title={`${service.title} in Fishers, IN | Goat Garage Door Service`} description={service.description} schema={schema}>
+<BaseLayout
+	title={service.metaTitle ?? `${service.title} in Fishers, IN - Goat Garage Door Service`}
+	description={service.metaDescription ?? service.description}
+	schema={schema}
+>
 	<div class="hero-stack">
 	<PageHero
-		eyebrow="Fishers & Indianapolis · 24/7"
+		eyebrow={optimized ? site.name : 'Fishers & Indianapolis · 24/7'}
 		title={service.title}
 		lead={service.lead}
 		crumbs={[
@@ -100,38 +113,74 @@ const schema = pageSchema([
 	</section>
 	</div>
 
-	<section class="svc-story">
-		<div class="container svc-story-layout">
-			<div class="svc-story-copy">
-				<p class="band-kicker">The job</p>
-				<h2>{shortTitle}</h2>
-				{service.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-				{
-					service.safety && (
-						<p class="callout">
-							<strong>Safety. </strong>
-							{service.safety}
-						</p>
-					)
-				}
-				<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+	{service.whyChoose && (
+		<section class="reasons" aria-labelledby="svc-why-title">
+			<img class="reasons-mark" src={goatHead.src} width={goatHead.width} height={goatHead.height} alt="Goat Garage Door Service goat logo" title="Goat Garage Door Service" />
+			<div class="container reasons-layout">
+				<div class="reasons-statement">
+					<p class="band-kicker">Why choose us</p>
+					<h2 class="area-name" id="svc-why-title">Why homeowners call <span>Goat.</span></h2>
+					<p>A crew that sizes the spring to your door, names the price first, and answers day or night.</p>
+				</div>
+				<ol class="reason-list">
+					{service.whyChoose.map((item, index) => (
+						<li>
+							<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+							<div>
+								<strong>{item.title}</strong>
+								<span>{item.text}</span>
+							</div>
+						</li>
+					))}
+				</ol>
 			</div>
-			<figure class="svc-story-photo">
-				<Image
-					src={photo.src}
-					alt={photo.alt}
-					widths={[640, 960]}
-					sizes="(min-width: 900px) 46vw, 100vw"
-					quality={86}
-					style={`object-position: ${focus}`}
-				/>
-				<figcaption>
-					{photo.title}
-					{photo.place ? ` · ${photo.place}` : ''}
-				</figcaption>
-			</figure>
-		</div>
-	</section>
+		</section>
+	)}
+
+	{optimized && (
+		<OfferCarousel
+			kicker="What we do"
+			title="Our services"
+			titleId="services-title"
+			quoteHref="/contact"
+		/>
+	)}
+
+	{!optimized && (
+		<section class="svc-story">
+			<div class="container svc-story-layout">
+				<div class="svc-story-copy">
+					<p class="band-kicker">The job</p>
+					<h2>{shortTitle}</h2>
+					{service.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+					{
+						service.safety && (
+							<p class="callout">
+								<strong>Safety. </strong>
+								{service.safety}
+							</p>
+						)
+					}
+					<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+				</div>
+				<figure class="svc-story-photo">
+					<Image
+						src={photo.src}
+						alt={photo.alt}
+						title={photo.title}
+						widths={[640, 960]}
+						sizes="(min-width: 900px) 46vw, 100vw"
+						quality={86}
+						style={`object-position: ${focus}`}
+					/>
+					<figcaption>
+						{photo.title}
+						{photo.place ? ` · ${photo.place}` : ''}
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+	)}
 
 	<section class="svc-visit" aria-labelledby="visit-title">
 		<div class="container">
@@ -174,18 +223,396 @@ const schema = pageSchema([
 		</div>
 	</section>
 
-	<OfferCarousel
-		kicker="What we do"
-		title="Our services"
-		titleId="services-title"
-		quoteHref="/contact"
-	/>
+	{seoFirst && (
+		<section class="svc-feature" aria-labelledby={`seo-${seoFirst.id}`}>
+			<div class="container svc-feature-layout">
+				<div class="svc-feature-copy">
+					<p class="band-kicker">Good to know</p>
+					<h2 id={`seo-${seoFirst.id}`}>{seoFirst.h2}</h2>
+					{(seoFirst.paragraphs ?? []).map((paragraph) => <p>{paragraph}</p>)}
+					<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+				</div>
+				{seoFirstPhoto && (
+					<figure class="svc-feature-photo">
+						<Image
+							src={seoFirstPhoto.src}
+							alt={seoFirstPhoto.alt}
+							title={seoFirstPhoto.title}
+							widths={[640, 960]}
+							sizes="(min-width: 900px) 42vw, 100vw"
+							quality={86}
+						/>
+					</figure>
+				)}
+			</div>
+		</section>
+	)}
+
+	{service.showTestimonials && (
+		<section class="trusted" aria-labelledby="svc-trusted-title">
+			<div class="container trusted-layout">
+				<div class="trusted-copy">
+					<svg class="trusted-shadow" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor">
+						<path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path>
+					</svg>
+					<div class="trusted-title">
+						<p class="band-kicker">Testimonials</p>
+						<h2 id="svc-trusted-title">Trusted by our clients</h2>
+					</div>
+					<a class="btn btn-orange rlg-review-trigger" href="/#review">Leave Us A Review</a>
+				</div>
+				<div class="quote-stage">
+					<div class="quote-viewport" data-quote-viewport aria-roledescription="carousel" aria-label="Five-star Google reviews">
+						<div class="quote-track" data-quote-track>
+							{
+								googleReviews.map((review) => (
+									<blockquote class="quote-card">
+										<svg class="quote-mark" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor"><path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path></svg>
+										<p>{review.quote}</p>
+										<footer>
+											<strong>{review.name}</strong>
+											<span>5-star Google review</span>
+										</footer>
+									</blockquote>
+								))
+							}
+						</div>
+					</div>
+					<button class="quote-next" type="button" aria-label="Next reviews" hidden>
+						<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4">
+							<path d="M9 5l7 7-7 7"></path>
+						</svg>
+					</button>
+				</div>
+			</div>
+			<script is:inline>
+				(function () {
+					const quoteViewport = document.querySelector('[data-quote-viewport]');
+					const quoteTrack = document.querySelector('[data-quote-track]');
+					const quoteNext = document.querySelector('.quote-next');
+					const quoteMark =
+						'<svg class="quote-mark" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor"><path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path></svg>';
+
+					const fillReviews = (reviews) => {
+						quoteTrack.replaceChildren(
+							...reviews.map((review) => {
+								const card = document.createElement('blockquote');
+								card.className = 'quote-card';
+								card.innerHTML = `${quoteMark}<p></p><footer><strong></strong><span>5-star Google review</span></footer>`;
+								card.querySelector('p').textContent = review.quote;
+								card.querySelector('strong').textContent = review.name;
+								return card;
+							}),
+						);
+					};
+
+					const loadReviews = async () => {
+						const response = await fetch('/api/google-reviews');
+						if (!response.ok) return [];
+						const data = await response.json();
+						return Array.isArray(data.reviews) ? data.reviews : [];
+					};
+
+					if (quoteViewport && quoteTrack && quoteNext) {
+						if (quoteTrack.children.length > 2) quoteNext.hidden = false;
+						loadReviews()
+							.then((reviews) => {
+								if (reviews.length >= 3) fillReviews(reviews);
+							})
+							.catch(() => {});
+					}
+
+					if (quoteViewport && quoteTrack && quoteTrack.children.length > 2) {
+						const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+						const ease = 'transform 0.7s cubic-bezier(.22, .7, .28, 1)';
+						let moving = false;
+						let moveToken = 0;
+						let direction = 1;
+						let timer = 0;
+						let pointerId = null;
+						let originX = 0;
+						let deltaX = 0;
+
+						const distance = () => {
+							const card = quoteTrack.firstElementChild;
+							if (!card) return 0;
+							const gap = parseFloat(getComputedStyle(quoteTrack).columnGap || getComputedStyle(quoteTrack).gap) || 0;
+							return card.getBoundingClientRect().width + gap;
+						};
+
+						const settle = (token) => {
+							if (!moving || token !== moveToken) return;
+							if (direction === 1) quoteTrack.appendChild(quoteTrack.firstElementChild);
+							quoteTrack.style.transition = 'none';
+							quoteTrack.style.transform = 'translate3d(0, 0, 0)';
+							void quoteTrack.offsetWidth;
+							moving = false;
+						};
+
+						const arm = () => {
+							moving = true;
+							const token = ++moveToken;
+							window.setTimeout(() => settle(token), 800);
+							return token;
+						};
+
+						const goNext = () => {
+							const shift = distance();
+							if (!shift || moving) return;
+							direction = 1;
+							if (reduceMotion) {
+								quoteTrack.appendChild(quoteTrack.firstElementChild);
+								return;
+							}
+							arm();
+							quoteTrack.style.transition = ease;
+							quoteTrack.style.transform = `translate3d(${-shift}px, 0, 0)`;
+						};
+
+						const goPrev = () => {
+							const shift = distance();
+							if (!shift || moving) return;
+							direction = -1;
+							quoteTrack.insertBefore(quoteTrack.lastElementChild, quoteTrack.firstElementChild);
+							if (reduceMotion) return;
+							arm();
+							quoteTrack.style.transition = 'none';
+							quoteTrack.style.transform = `translate3d(${-shift}px, 0, 0)`;
+							void quoteTrack.offsetWidth;
+							quoteTrack.style.transition = ease;
+							quoteTrack.style.transform = 'translate3d(0, 0, 0)';
+						};
+
+						quoteTrack.addEventListener('transitionend', (event) => {
+							if (event.target !== quoteTrack || event.propertyName !== 'transform') return;
+							settle(moveToken);
+						});
+
+						const stop = () => window.clearInterval(timer);
+						const start = () => {
+							if (reduceMotion) return;
+							stop();
+							timer = window.setInterval(goNext, 5200);
+						};
+
+						quoteNext?.addEventListener('click', () => {
+							goNext();
+							start();
+						});
+
+						quoteViewport.addEventListener('keydown', (event) => {
+							if (event.key === 'ArrowRight') {
+								event.preventDefault();
+								goNext();
+								start();
+							} else if (event.key === 'ArrowLeft') {
+								event.preventDefault();
+								goPrev();
+								start();
+							}
+						});
+
+						quoteViewport.addEventListener('mouseenter', stop);
+						quoteViewport.addEventListener('mouseleave', start);
+						quoteViewport.addEventListener('focusin', stop);
+						quoteViewport.addEventListener('focusout', (event) => {
+							if (!quoteViewport.contains(event.relatedTarget)) start();
+						});
+						document.addEventListener('visibilitychange', () => {
+							if (document.hidden) stop();
+							else start();
+						});
+						window.addEventListener('resize', () => {
+							moveToken += 1;
+							quoteTrack.style.transition = 'none';
+							quoteTrack.style.transform = 'translate3d(0, 0, 0)';
+							moving = false;
+						});
+
+						quoteViewport.addEventListener('pointerdown', (event) => {
+							if (event.button !== 0 || event.target.closest('.quote-next')) return;
+							pointerId = event.pointerId;
+							originX = event.clientX;
+							deltaX = 0;
+						});
+						quoteViewport.addEventListener('pointermove', (event) => {
+							if (event.pointerId !== pointerId) return;
+							deltaX = event.clientX - originX;
+							if (Math.abs(deltaX) > 48) quoteViewport.setPointerCapture(event.pointerId);
+						});
+						const endPointer = (event) => {
+							if (event.pointerId !== pointerId) return;
+							pointerId = null;
+							if (Math.abs(deltaX) > 48) {
+								if (deltaX < 0) goNext();
+								else goPrev();
+								start();
+							}
+							deltaX = 0;
+						};
+						quoteViewport.addEventListener('pointerup', endPointer);
+						quoteViewport.addEventListener('pointercancel', endPointer);
+
+						start();
+					}
+				})();
+			</script>
+		</section>
+	)}
+
+	{service.process && (
+		<section class="svc-process" aria-labelledby="svc-how-title">
+			<div class="container">
+				<div class="band-head">
+					<p class="band-kicker">The visit</p>
+					<h2 id="svc-how-title">How a spring replacement goes</h2>
+				</div>
+				<ol class="svc-process-grid">
+					{service.process.map((step, index) => (
+						<li class="svc-process-step">
+							<span class="svc-process-num" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+							<strong>{step.title}</strong>
+							<p>{step.text}</p>
+						</li>
+					))}
+				</ol>
+			</div>
+		</section>
+	)}
+
+	{seoRest.map((sec) => (
+		sec.layout === 'causes' ? (
+			<section class="reasons is-dark" aria-labelledby={`seo-${sec.id}`}>
+				<div class="container reasons-layout">
+					<div class="reasons-statement">
+						<p class="band-kicker">Good to know</p>
+						<h2 class="area-name" id={`seo-${sec.id}`}>{sec.h2}</h2>
+						{sec.intro && <p>{sec.intro}</p>}
+						<a class="band-more" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+					</div>
+					<ol class="reason-list">
+						{(sec.items ?? []).map((item, index) => (
+							<li>
+								<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+								<div>
+									{item.title && <strong>{item.title}</strong>}
+									<span>{item.text}</span>
+								</div>
+							</li>
+						))}
+					</ol>
+				</div>
+			</section>
+		) : sec.layout === 'compare' ? (
+			<section class="svc-visit" aria-labelledby={`seo-${sec.id}`}>
+				<div class="container">
+					<div class="band-head">
+						<p class="band-kicker">Good to know</p>
+						<h2 id={`seo-${sec.id}`}>{sec.h2}</h2>
+						{sec.intro && <p class="band-lead">{sec.intro}</p>}
+					</div>
+					<div class="svc-visit-grid">
+						{(sec.columns ?? []).map((column) => (
+							<div>
+								<h3>{column.heading}</h3>
+								<ol class="svc-points">
+									{column.points.map((point, index) => (
+										<li>
+											<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+											<span>{point}</span>
+										</li>
+									))}
+								</ol>
+							</div>
+						))}
+					</div>
+					{sec.note && (
+						<p class="callout">
+							<strong>Note. </strong>
+							{sec.note}
+						</p>
+					)}
+				</div>
+			</section>
+		) : (
+			<section class="svc-visit is-dark" aria-labelledby={`seo-${sec.id}`}>
+				<div class="container">
+					<div class="band-head">
+						<p class="band-kicker">On site</p>
+						<h2 id={`seo-${sec.id}`}>{sec.h2}</h2>
+					</div>
+					<ol class="svc-points">
+						{(sec.items ?? []).map((item, index) => (
+							<li>
+								<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+								<span>{item.text}</span>
+							</li>
+						))}
+					</ol>
+				</div>
+			</section>
+		)
+	))}
+
+	{service.showAreas && (
+		<section class="places" aria-labelledby="svc-areas-title">
+			<div class="container places-layout">
+				<div class="places-copy">
+					<p class="band-kicker">Service areas</p>
+					<h2 id="svc-areas-title">Spring replacement across<br />Fishers and nearby towns</h2>
+					<p>We bring sized torsion springs to homes in Fishers, Indianapolis, and the towns around them.</p>
+					<div class="places-actions">
+						<a class="btn btn-orange places-all" href="/service-areas">
+							View all areas
+							<span aria-hidden="true">→</span>
+						</a>
+						<a class="btn btn-line places-call" href={`tel:${site.phoneTel}`}>Call now</a>
+					</div>
+				</div>
+				<div class="place-grid">
+					{areas.map((area) => (
+						<a class="place-card" href={`/service-areas/${area.slug}`}>
+							<span class="place-name">
+								<strong>{area.name}</strong>
+								<span>{area.county}</span>
+							</span>
+							<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
+								<path fill="currentColor" fill-rule="evenodd" d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+							</svg>
+						</a>
+					))}
+				</div>
+			</div>
+			<div class="container places-map">
+				<iframe
+					class="map-frame"
+					title="Goat Garage Door Service on Google Maps"
+					src={site.mapEmbed}
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade"
+					allowfullscreen
+				></iframe>
+				<p>
+					<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
+				</p>
+			</div>
+		</section>
+	)}
+
+	{!optimized && (
+		<OfferCarousel
+			kicker="What we do"
+			title="Our services"
+			titleId="services-title"
+			quoteHref="/contact"
+		/>
+	)}
 
 	<section class="home-faq" aria-labelledby="faq-title">
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Questions</p>
-				<h2 id="faq-title">Before you call</h2>
+				<p class="ui-heading" id="faq-title">Before you call</p>
 			</div>
 			<div class="faq">
 				{

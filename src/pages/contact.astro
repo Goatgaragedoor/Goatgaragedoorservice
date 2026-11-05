@@ -2,22 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import QuoteForm from '../components/QuoteForm.astro';
-import { breadcrumbNode, pageSchema } from '../data/schema';
 import { site } from '../data/site';
 import openerPhoto from '../assets/images/design/hero-opener.jpg';
-
-const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent('Fishers, IN')}&z=11&output=embed`;
 ---
 
 <BaseLayout
-	title="Contact Goat Garage Door Service | Fishers, IN"
+	title="Contact Goat Garage Door Service - Fishers, IN"
 	description="Request garage door service in Fishers or Indianapolis, or call 317-854-6917 any time. Goat Garage Door Service is open 24/7."
-	schema={pageSchema([
-		breadcrumbNode([
-			{ name: 'Home', path: '/' },
-			{ name: 'Contact', path: '/contact' },
-		]),
-	])}
 	showPhotoCta={false}
 >
 	<div class="contact-page">
@@ -129,21 +120,11 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent('Fishers, IN
 				<div class="contact-map">
 					<iframe
 						class="map-frame"
-						title="Map of Fishers, Indianapolis, and the surrounding service area"
-						src={mapSrc}
+						title="Goat Garage Door Service on Google Maps"
+						src={site.mapEmbed} allowfullscreen
 						loading="lazy"
 						referrerpolicy="no-referrer-when-downgrade"
 					></iframe>
-					<a class="contact-map-badge" href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
-						<svg viewBox="0 0 24 24" aria-hidden="true">
-							<path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10z"></path>
-							<circle cx="12" cy="11" r="2.1"></circle>
-						</svg>
-						<span>
-							<span>Proudly serving</span>
-							<strong>Fishers and the surrounding area</strong>
-						</span>
-					</a>
 				</div>
 				<div class="contact-area-copy">
 					<p class="band-kicker">Our service area</p>
@@ -199,7 +180,8 @@ const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent('Fishers, IN
 				src={openerPhoto.src}
 				width={openerPhoto.width}
 				height={openerPhoto.height}
-				alt=""
+				alt="Garage door opener serviced by Goat Garage Door Service"
+				title="Goat Garage Door Service"
 				loading="lazy"
 				decoding="async"
 			/>

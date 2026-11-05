@@ -3,7 +3,6 @@ import { Image, getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import { work, workCategories } from '../data/work';
-import { breadcrumbNode, pageSchema } from '../data/schema';
 
 const photos = await Promise.all(
 	work.map(async (item) => {
@@ -18,14 +17,8 @@ const photos = await Promise.all(
 ---
 
 <BaseLayout
-	title="Garage Door Projects | Goat Garage Door Service"
+	title="Garage Door Projects - Goat Garage Door Service"
 	description="Photos of garage door spring replacements, new door installations, opener work, and repairs by Goat Garage Door Service in Fishers and Indianapolis."
-	schema={pageSchema([
-		breadcrumbNode([
-			{ name: 'Home', path: '/' },
-			{ name: 'Our work', path: '/our-work' },
-		]),
-	])}
 >
 	<PageHero
 		eyebrow="Fishers & Indianapolis jobs"
@@ -65,7 +58,7 @@ const photos = await Promise.all(
 								data-caption={item.place ? `${item.title} · ${item.place}` : item.title}
 								aria-label={`Open photo: ${item.alt}`}
 							>
-								<Image src={item.src} alt={item.alt} widths={[480, 768]} sizes="(min-width: 900px) 360px, 100vw" quality={86} />
+								<Image src={item.src} alt={item.alt} title={item.title} widths={[480, 768]} sizes="(min-width: 900px) 360px, 100vw" quality={86} />
 							</button>
 						</figure>
 					))

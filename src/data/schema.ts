@@ -52,10 +52,19 @@ export function localBusiness() {
 	};
 }
 
-export function pageSchema(extra: Record<string, unknown>[] = []) {
+/** Homepage only: a single LocalBusiness entity. */
+export function localBusinessSchema() {
 	return {
 		'@context': 'https://schema.org',
-		'@graph': [localBusiness(), ...extra],
+		...localBusiness(),
+	};
+}
+
+/** Wrap one or more page-specific schema nodes in an @graph. Does not inject LocalBusiness. */
+export function graphSchema(nodes: Record<string, unknown>[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@graph': nodes,
 	};
 }
 

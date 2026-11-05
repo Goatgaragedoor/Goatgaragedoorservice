@@ -1,11 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import OfferCarousel from '../components/OfferCarousel.astro';
 import ProjectCarousel from '../components/ProjectCarousel.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import { areas } from '../data/areas';
-import { googleRanking } from '../data/reviews';
-import { faqNode, pageSchema } from '../data/schema';
+import { googleRanking, googleReviews } from '../data/reviews';
+import { localBusinessSchema } from '../data/schema';
 import { site } from '../data/site';
 import designHero from '../assets/images/design/hero-truck.jpg';
 import designHero2 from '../assets/images/design/hero-tech.jpg';
@@ -14,6 +15,7 @@ import designInstall from '../assets/images/design/design-install.jpg';
 import designClosing from '../assets/images/design/design-closing.jpg';
 import formOpener from '../assets/images/design/form-opener.jpg';
 import goatHead from '../assets/images/goat-head.png';
+import seoFeaturePhoto from '../assets/images/tech-spring.jpg';
 
 const reasons = [
 	{
@@ -44,44 +46,26 @@ const heroSources = [
 ];
 
 
-const featuredAreaSlugs = [
-	'fishers',
-	'indianapolis',
-	'carmel',
-	'noblesville',
-	'westfield',
-	'lawrence',
-	'zionsville',
-	'greenwood',
-	'brownsburg',
-];
-
-const featuredAreas = featuredAreaSlugs.map((slug) => {
-	const area = areas.find((item) => item.slug === slug);
-	if (!area) throw new Error(slug);
-	return area;
-});
-
 const faqs = [
 	{
-		q: 'Do you answer at night?',
-		a: 'Yes. Hours are 24/7, including weekends and holidays. Call 317-854-6917 if the door is stuck open, hanging crooked, or will not lift.',
+		q: 'Do you offer same-day garage door repair in Fishers?',
+		a: 'Often, yes. We are based on Glenn Abbey Lane in Fishers, so local calls are our shortest runs. Call 317-854-6917 and we will give you the next available window. Emergencies are handled 24/7, including weekends and holidays.',
 	},
 	{
 		q: 'Do you quote before the repair starts?',
 		a: 'Yes. You hear the number before any repair starts. If a full door is the right fix instead of one part, we say that before the door comes apart.',
 	},
 	{
-		q: 'What should I do if a spring snaps?',
-		a: 'Leave the door alone. Springs and cables are under tension. Keep people and cars clear, and do not pull the red release to lift a two-car door by hand.',
+		q: 'What should I do if a garage door spring snaps?',
+		a: 'Leave the door alone. Springs and cables are under tension. Keep people and cars clear, and do not pull the red release to lift a two-car door by hand. Call us and we will handle it safely.',
 	},
 	{
-		q: 'Can you fix it the same visit?',
+		q: 'Can you fix the door in a single visit?',
 		a: 'Springs, cables, rollers, hinges, seals, and openers are the usual same-visit repairs. We bring the parts those symptoms usually need, then test the door and the auto-reverse before we leave.',
 	},
 	{
-		q: 'Which towns do you cover?',
-		a: 'Home base is 10378 Glenn Abbey Ln in Fishers. We also cover Indianapolis, Carmel, Noblesville, Westfield, Lawrence, McCordsville, Zionsville, Greenwood, Anderson, Brownsburg, and Greenfield.',
+		q: 'Which areas do you cover from Fishers?',
+		a: 'Home base is 10378 Glenn Abbey Ln in Fishers. We also cover Indianapolis, Carmel, Noblesville, Westfield, Lawrence, McCordsville, Zionsville, Greenwood, Anderson, Brownsburg, Greenfield, and Fortville.',
 	},
 	{
 		q: 'Do you install new doors, or only repair?',
@@ -91,9 +75,9 @@ const faqs = [
 ---
 
 <BaseLayout
-	title="Garage Door Repair & Installation | Goat Garage Door Service"
-	description="Reliable garage door repair and installation in Fishers and Indianapolis. Springs, openers, cables, and new doors. Call 317-854-6917, open 24/7."
-	schema={pageSchema([faqNode(faqs)])}
+	title="Garage Door Repair in Fishers – Goat Garage Door"
+	description="Need Garage Door Repair in Fishers? Goat Garage Door Service handles jammed garage doors, sudden malfunctions, and slow or uneven operation. Call today!"
+	schema={localBusinessSchema()}
 >
 	<div class="home">
 	<div class="screen-hero">
@@ -103,11 +87,14 @@ const faqs = [
 				{
 					heroSources.map((slide, index) => (
 						<div class="hero-slide">
-							<img
-								src={slide.src.src}
-								width={slide.src.width}
-								height={slide.src.height}
-								alt=""
+							<Image
+								src={slide.src}
+								widths={[768, 1024, 1536, 2048]}
+								sizes="100vw"
+								format="webp"
+								quality={82}
+								alt="Goat Garage Door Service garage door repair and installation"
+								title="Goat Garage Door Service"
 								loading="eager"
 								decoding="async"
 								fetchpriority={index === 0 ? 'high' : 'low'}
@@ -129,10 +116,10 @@ const faqs = [
 		</div>
 		<div class="container hero-inner">
 			<div class="hero-copy">
-				<p class="eyebrow">Garage door repair &amp; installation</p>
-				<h1>Reliable Garage<br />Door Service <span>When You Need It</span></h1>
+				<p class="eyebrow">{site.name}</p>
+				<h1>Garage Door Repair<br />in Fishers, IN</h1>
 				<p>
-					From urgent repairs to brand new installations, our local team keeps your home safe, secure, and looking its best.
+					Garage Door Repair in Fishers done right — from a broken spring to a brand-new door, our local team handles repairs and new installs across Fishers and the surrounding towns, with the price set before the work starts.
 				</p>
 				<div class="hero-actions">
 					<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
@@ -154,7 +141,7 @@ const faqs = [
 						<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
 							<path d="m12 3.2 2.2 4.6 5.1.6-3.8 3.4 1 5.1L12 14.6 7.5 17l1-5.1L4.7 8.4l5.1-.6z"></path>
 						</svg>
-						5-Star Service Across Indy Metro
+						5-Star Rated Local Service
 					</li>
 				</ul>
 			</div>
@@ -206,7 +193,8 @@ const faqs = [
 			src={goatHead.src}
 			width={goatHead.width}
 			height={goatHead.height}
-			alt=""
+			alt="Goat Garage Door Service goat logo"
+			title="Goat Garage Door Service"
 		/>
 		<div class="container reasons-layout">
 			<div class="reasons-statement">
@@ -231,6 +219,7 @@ const faqs = [
 						width="160"
 						height="82"
 						alt="Goat Garage Door Service BBB Business Review"
+						title="Goat Garage Door Service BBB Business Review"
 					/>
 				</a>
 			</div>
@@ -277,10 +266,24 @@ const faqs = [
 					</span>
 					<span>on Google</span>
 				</a>
+				<button id="rlgOpenPopup" class="btn btn-orange rlg-review-trigger" type="button">Leave Us A Review</button>
 			</div>
 			<div class="quote-stage">
 				<div class="quote-viewport" data-quote-viewport aria-roledescription="carousel" aria-label="Five-star Google reviews">
-					<div class="quote-track" data-quote-track></div>
+					<div class="quote-track" data-quote-track>
+						{
+							googleReviews.map((review) => (
+								<blockquote class="quote-card">
+									<svg class="quote-mark" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor"><path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path></svg>
+									<p>{review.quote}</p>
+									<footer>
+										<strong>{review.name}</strong>
+										<span>5-star Google review</span>
+									</footer>
+								</blockquote>
+							))
+						}
+					</div>
 				</div>
 				<button class="quote-next" type="button" aria-label="Next reviews" hidden>
 					<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4">
@@ -288,6 +291,546 @@ const faqs = [
 					</svg>
 				</button>
 			</div>
+		</div>
+
+		<!-- Review Link Generator Widget -->
+		<div id="rlgPopup" class="rlg-popup-overlay">
+			<div class="rlg-popup-content">
+				<span id="rlgClosePopup" class="rlg-close">&times;</span>
+				<div class="rlg-review-container">
+					<h3>Goat Garage Door Service</h3>
+					<p>We value your feedback! Please rate our service.</p>
+					<div class="rlg-star-rating-wrapper">
+						<div class="rlg-star-rating">
+							<input type="radio" id="rlgStar5" name="rlgRating" value="5" />
+							<label for="rlgStar5" title="5 stars">★</label>
+							<input type="radio" id="rlgStar4" name="rlgRating" value="4" />
+							<label for="rlgStar4" title="4 stars">★</label>
+							<input type="radio" id="rlgStar3" name="rlgRating" value="3" />
+							<label for="rlgStar3" title="3 stars">★</label>
+							<input type="radio" id="rlgStar2" name="rlgRating" value="2" />
+							<label for="rlgStar2" title="2 stars">★</label>
+							<input type="radio" id="rlgStar1" name="rlgRating" value="1" />
+							<label for="rlgStar1" title="1 star">★</label>
+						</div>
+						<button class="rlg-submit-btn" onclick="rlgSubmitReview()">Submit Review</button>
+					</div>
+					<div class="rlg-feedback-form" id="rlgFeedbackForm">
+						<h3>Your Feedback</h3>
+						<textarea id="rlgFeedbackText" placeholder="Please let us know how we can improve our service..."></textarea>
+						<button class="rlg-submit-btn" onclick="rlgSubmitFeedback()">Submit Feedback</button>
+					</div>
+					<div class="rlg-thank-you" id="rlgThankYou">
+						<p>✓</p>
+						<p>Thank you for your feedback!</p>
+					</div>
+
+					<div class="rlg-positive-reviews">
+						<h3>Our most recent online review:</h3>
+						<div class="rlg-review">
+							<div class="rlg-review-avatar rlg-review-avatar-fallback">
+								<span>R</span>
+								<img
+									class="rlg-review-avatar-img"
+									src="https://cdn.jsdelivr.net/gh/yamos28/ReviewWidget26@main/public/reviewer-images/a.jpg"
+									alt="Reese Cooper"
+									title="Reese Cooper"
+									loading="lazy"
+									referrerpolicy="no-referrer"
+									onerror="this.style.display='none'; this.parentNode.classList.add('rlg-avatar-fallback');"
+								/>
+							</div>
+							<div class="rlg-review-content">
+								<strong>Reese Cooper</strong>
+								<div class="rlg-stars">★★★★★</div>
+								<span class="rlg-time">2 months ago</span>
+								<p>Great value and strong results. Goat Garage Door Service exceeded my expectations.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<style is:global>
+			/* Review Link Generator Widget — brand-matched to Goat Garage Door Service */
+			.rlg-review-trigger {
+				align-self: flex-start;
+				margin-top: 1.35rem;
+			}
+			.rlg-popup-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.6);
+				backdrop-filter: blur(4px);
+				z-index: 999999;
+				display: none;
+				animation: rlgFadeIn 0.2s ease;
+			}
+			@keyframes rlgFadeIn {
+				from { opacity: 0; }
+				to { opacity: 1; }
+			}
+			.rlg-popup-content {
+				background: #fff;
+				margin: 5% auto;
+				padding: 32px;
+				width: 90%;
+				max-width: 480px;
+				border-radius: 16px;
+				position: relative;
+				box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+				animation: rlgSlideUp 0.3s ease;
+			}
+			@keyframes rlgSlideUp {
+				from { opacity: 0; transform: translateY(20px); }
+				to { opacity: 1; transform: translateY(0); }
+			}
+			.rlg-close {
+				position: absolute;
+				top: 16px;
+				right: 20px;
+				font-size: 28px;
+				color: #9ca3af;
+				cursor: pointer;
+				line-height: 1;
+				transition: color 0.2s;
+			}
+			.rlg-close:hover { color: #374151; }
+			.rlg-review-container { text-align: center; }
+			.rlg-review-container > p {
+				font-size: 15px;
+				color: #6b7280;
+				margin: 0 0 24px 0;
+			}
+			.rlg-star-rating-wrapper {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 16px;
+				margin-bottom: 24px;
+			}
+			.rlg-star-rating {
+				display: inline-flex;
+				flex-direction: row-reverse;
+				font-size: 36px;
+			}
+			.rlg-star-rating input { display: none; }
+			.rlg-star-rating label {
+				color: #e5e7eb;
+				cursor: pointer;
+				margin: 0 2px;
+				transition: color 0.15s, transform 0.15s;
+			}
+			.rlg-star-rating label:hover { transform: scale(1.1); }
+			.rlg-star-rating input:checked ~ label,
+			.rlg-star-rating label:hover,
+			.rlg-star-rating label:hover ~ label {
+				color: #fbbf24;
+			}
+			.rlg-submit-btn {
+				background: var(--orange);
+				color: #fff;
+				border: 1.5px solid var(--orange);
+				border-radius: 10px;
+				padding: 0.7rem 1.15rem;
+				min-height: 46px;
+				font-size: 0.92rem;
+				font-weight: 700;
+				cursor: pointer;
+				box-shadow: 0 8px 18px rgba(209, 83, 33, 0.28);
+			}
+			.rlg-submit-btn:hover {
+				background: var(--orange-deep);
+				border-color: var(--orange-deep);
+			}
+			.rlg-feedback-form {
+				display: none;
+				margin-top: 24px;
+				animation: rlgFadeIn 0.3s ease;
+			}
+			.rlg-feedback-form textarea {
+				width: 100%;
+				height: 100px;
+				padding: 12px;
+				border: 1px solid #e5e7eb;
+				border-radius: 8px;
+				font-size: 14px;
+				resize: vertical;
+				margin-bottom: 12px;
+			}
+			.rlg-feedback-form textarea:focus {
+				outline: none;
+				border-color: var(--orange);
+				box-shadow: 0 0 0 3px rgba(209, 83, 33, 0.15);
+			}
+			.rlg-thank-you {
+				display: none;
+				text-align: center;
+				padding: 24px;
+			}
+			.rlg-thank-you p {
+				font-size: 16px;
+				color: #374151;
+				margin: 0;
+			}
+			.rlg-positive-reviews {
+				margin-top: 32px;
+				text-align: left;
+				border-top: 1px solid #f3f4f6;
+				padding-top: 24px;
+			}
+			.rlg-positive-reviews h3 {
+				font-size: 14px;
+				color: #000;
+				margin: 0 0 16px 0;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+			}
+			.rlg-review {
+				display: flex;
+				gap: 12px;
+				padding: 16px;
+				background: #f9fafb;
+				border-radius: 12px;
+			}
+			.rlg-review-avatar {
+				width: 40px;
+				height: 40px;
+				background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+				color: #fff;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 600;
+				font-size: 16px;
+				flex-shrink: 0;
+				position: relative;
+			}
+			.rlg-review-avatar-img {
+				width: 100%;
+				height: 100%;
+				display: block;
+				object-fit: cover;
+				border-radius: 50%;
+			}
+			.rlg-review-avatar-fallback span {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: 600;
+				font-size: 16px;
+				color: #fff;
+			}
+			.rlg-review-avatar-fallback.rlg-avatar-fallback {
+				background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+			}
+			.rlg-review-content { flex: 1; }
+			.rlg-review-content strong {
+				display: block;
+				font-size: 14px;
+				color: #111827;
+				margin-bottom: 4px;
+			}
+			.rlg-review-content .rlg-stars {
+				color: #fbbf24;
+				font-size: 14px;
+				margin-bottom: 4px;
+			}
+			.rlg-review-content .rlg-time {
+				font-size: 12px;
+				color: #9ca3af;
+				display: block;
+				margin-bottom: 8px;
+			}
+			.rlg-review-content p {
+				font-size: 13px;
+				color: #4b5563;
+				margin: 0;
+				line-height: 1.5;
+			}
+		</style>
+
+		<script is:inline>
+			(function() {
+			    var rlgReviewLink = "https://search.google.com/local/writereview?placeid=ChIJOz0Il8Mt3qQRHKPx389xI0w";
+			    var rlgEmail = "goatgaragedoorservice@gmail.com";
+			    var rlgBusinessName = "Goat Garage Door Service";
+			    var rlgPlatform = "google";
+			    var rlgMinRating = 4;
+			    var platformHash = '';
+			    var rlgFeedbackEndpoint = "https://reviewtool.gsmarketingroup.com/api/send-feedback";
+			    var rlgTrackEndpoint = "https://reviewtool.gsmarketingroup.com/api/track-event";
+			    var rlgLastRating = 0;
+
+			    function rlgResolveEndpoint(url) {
+			        if (!url) return '';
+			        try {
+			            return new URL(url, window.location.origin).toString();
+			        } catch {
+			            return url;
+			        }
+			    }
+
+			    var rlgFeedbackEndpointResolved = rlgResolveEndpoint(rlgFeedbackEndpoint);
+			    var rlgTrackEndpointResolved = rlgResolveEndpoint(rlgTrackEndpoint);
+
+			    function rlgNormalizeHash(hash) {
+			        if (!hash) return '';
+			        return hash.toLowerCase().split('?')[0];
+			    }
+
+			    function rlgMaybeOpenFromHash() {
+			        var currentHash = rlgNormalizeHash(window.location.hash);
+			        if (currentHash === platformHash) {
+			            rlgOpenPopup('hash');
+			        }
+			    }
+
+			    function rlgGetWidgetUrl() {
+			        var hash = platformHash || rlgNormalizeHash(window.location.hash);
+			        if (!hash) return window.location.href;
+			        return window.location.origin + window.location.pathname + hash;
+			    }
+
+			    function rlgTrackEvent(eventType, extra) {
+			        if (!rlgTrackEndpointResolved) return;
+			        var payload = {
+			            businessEmail: rlgEmail,
+			            businessName: rlgBusinessName,
+			            platform: rlgPlatform,
+			            eventType: eventType,
+			            timestamp: new Date().toISOString(),
+			            pageUrl: window.location.href,
+			            referrer: document.referrer || '',
+			            reviewLink: rlgReviewLink,
+			            widgetUrl: rlgGetWidgetUrl()
+			        };
+			        if (extra) {
+			            for (var key in extra) {
+			                payload[key] = extra[key];
+			            }
+			        }
+			        try {
+			            var body = JSON.stringify(payload);
+			            if (navigator.sendBeacon) {
+			                var blob = new Blob([body], { type: 'application/json' });
+			                navigator.sendBeacon(rlgTrackEndpointResolved, blob);
+			                return;
+			            }
+			            fetch(rlgTrackEndpointResolved, {
+			                method: 'POST',
+			                headers: { 'Content-Type': 'application/json' },
+			                body: body,
+			                keepalive: true
+			            }).catch(function() {});
+			        } catch (err) {
+			            // ignore tracking errors
+			        }
+			    }
+
+			    function rlgOpenPopup(source) {
+			        document.getElementById('rlgPopup').style.display = 'block';
+			        document.body.style.overflow = 'hidden';
+			        rlgTrackEvent('widget_open', { source: source || 'button' });
+			    }
+			    function rlgClosePopup() {
+			        document.getElementById('rlgPopup').style.display = 'none';
+			        document.body.style.overflow = 'auto';
+			    }
+			    window.rlgSubmitReview = function() {
+			        var rating = document.querySelector('#rlgPopup input[name="rlgRating"]:checked');
+			        if (!rating) {
+			            alert('Please select a rating before submitting.');
+			            return;
+			        }
+			        rlgLastRating = parseInt(rating.value);
+			        if (rlgLastRating >= rlgMinRating) {
+			            rlgTrackEvent('review_redirect', { rating: rlgLastRating });
+			            window.location.href = rlgReviewLink;
+			        } else {
+			            document.getElementById('rlgFeedbackForm').style.display = 'block';
+			            document.querySelector('.rlg-star-rating-wrapper').style.display = 'none';
+			            if (document.querySelector('.rlg-positive-reviews')) {
+			                document.querySelector('.rlg-positive-reviews').style.display = 'none';
+			            }
+			        }
+			    };
+			    window.rlgSubmitFeedback = function() {
+			        var feedback = document.getElementById('rlgFeedbackText').value;
+			        if (feedback.trim() === '') {
+			            alert('Please enter your feedback before submitting.');
+			            return;
+			        }
+			        var payload = {
+			            businessName: rlgBusinessName,
+			            businessEmail: rlgEmail,
+			            customerRating: rlgLastRating || 0,
+			            customerFeedback: feedback,
+			            platform: rlgPlatform,
+			            timestamp: new Date().toISOString()
+			        };
+			        if (!rlgFeedbackEndpointResolved) {
+			            alert('Feedback service is not configured. Please try again later.');
+			            return;
+			        }
+			        fetch(rlgFeedbackEndpointResolved, {
+			            method: 'POST',
+			            headers: { 'Content-Type': 'application/json' },
+			            body: JSON.stringify(payload),
+			            keepalive: true
+			        })
+			        .then(function(res) {
+			            if (!res.ok) throw new Error('Failed to send feedback');
+			            return res.json().catch(function() { return {}; });
+			        })
+			        .then(function() {
+			            rlgTrackEvent('feedback_submit', { rating: rlgLastRating || 0 });
+			            document.getElementById('rlgFeedbackForm').style.display = 'none';
+			            document.getElementById('rlgThankYou').style.display = 'block';
+			        })
+			        .catch(function() {
+			            alert('Sorry, there was a problem sending your feedback. Please try again.');
+			        });
+			    };
+			    document.addEventListener('DOMContentLoaded', function() {
+			        document.getElementById('rlgOpenPopup').addEventListener('click', function() {
+			            rlgOpenPopup('button');
+			        });
+			        document.getElementById('rlgClosePopup').addEventListener('click', rlgClosePopup);
+			        document.getElementById('rlgPopup').addEventListener('click', function(e) {
+			            if (e.target === this) rlgClosePopup();
+			        });
+			        platformHash = '#review';
+			        platformHash = platformHash.toLowerCase();
+			        rlgMaybeOpenFromHash();
+			        window.addEventListener('hashchange', rlgMaybeOpenFromHash);
+			    });
+			})();
+		</script>
+	</section>
+
+	<section class="svc-feature" aria-labelledby="home-problems-title">
+		<div class="container svc-feature-layout">
+			<div class="svc-feature-copy">
+				<p class="band-kicker">Good to know</p>
+				<h2 id="home-problems-title">Garage Door Problems Fishers Homeowners Call About Most</h2>
+				<p>
+					Garage Door Repair in Fishers usually starts with one of a few failures: a torsion spring that snapped with a bang, a frayed or off-track cable, worn rollers that grind, or an opener that runs while the door stays put. Because we are based right here on Glenn Abbey Lane, those calls are our shortest runs.
+				</p>
+				<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			</div>
+			<figure class="svc-feature-photo">
+				<Image
+					src={seoFeaturePhoto}
+					alt="Goat Garage Door Service technician repairing a garage door spring in Fishers"
+					title="Goat Garage Door Service"
+					widths={[640, 960]}
+					sizes="(min-width: 900px) 42vw, 100vw"
+					quality={86}
+				/>
+			</figure>
+		</div>
+	</section>
+
+	<section class="reasons is-dark" aria-labelledby="home-solutions-title">
+		<div class="container reasons-layout">
+			<div class="reasons-statement">
+				<p class="band-kicker">Good to know</p>
+				<h2 class="area-name" id="home-solutions-title">Garage Door Repair Solutions for Fishers Homeowners</h2>
+				<p>Whatever the door is doing, there is a fix for it. These are the Garage Door Repair in Fishers solutions homeowners call us for most.</p>
+				<a class="band-more" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+			</div>
+			<ol class="reason-list">
+				<li>
+					<span class="reason-index" aria-hidden="true">01</span>
+					<div>
+						<strong>Broken spring replacement</strong>
+						<span>A snapped torsion or extension spring is the most common failure. We size and swap the spring to match your door so it lifts evenly again.</span>
+					</div>
+				</li>
+				<li>
+					<span class="reason-index" aria-hidden="true">02</span>
+					<div>
+						<strong>Cable and roller repair</strong>
+						<span>Frayed cables and worn rollers make a door bind or hang crooked. We reset the cables on the drums and replace rollers so the door tracks clean.</span>
+					</div>
+				</li>
+				<li>
+					<span class="reason-index" aria-hidden="true">03</span>
+					<div>
+						<strong>Opener service</strong>
+						<span>When an opener runs but the door stays put, or the remote quits, we check the gear, travel, force, and sensors before replacing the unit.</span>
+					</div>
+				</li>
+				<li>
+					<span class="reason-index" aria-hidden="true">04</span>
+					<div>
+						<strong>Tune-ups and safety checks</strong>
+						<span>A yearly balance and auto-reverse check catches tired hardware before it strands a car and keeps the whole system running longer.</span>
+					</div>
+				</li>
+			</ol>
+		</div>
+	</section>
+
+	<section class="svc-visit" aria-labelledby="home-compare-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">Good to know</p>
+				<h2 id="home-compare-title">Repairing a Garage Door Versus Replacing It in Fishers</h2>
+				<p class="band-lead">
+					Choosing between a fix and a full replacement is part of every Garage Door Repair in Fishers we take on. We weigh the age, damage, and cost, then give you both numbers so the decision stays yours.
+				</p>
+			</div>
+			<div class="svc-visit-grid">
+				<div>
+					<h3>A repair makes sense</h3>
+					<ol class="svc-points">
+						<li><span class="reason-index" aria-hidden="true">01</span><span>The door is sound but one part failed</span></li>
+						<li><span class="reason-index" aria-hidden="true">02</span><span>A spring, cable, roller, or opener fix</span></li>
+						<li><span class="reason-index" aria-hidden="true">03</span><span>The sections and track are straight</span></li>
+						<li><span class="reason-index" aria-hidden="true">04</span><span>Usually the faster, lower-cost route</span></li>
+					</ol>
+				</div>
+				<div>
+					<h3>A replacement makes sense</h3>
+					<ol class="svc-points">
+						<li><span class="reason-index" aria-hidden="true">01</span><span>Sections are rusted, dented, or delaminated</span></li>
+						<li><span class="reason-index" aria-hidden="true">02</span><span>The door is loud, drafty, and always breaking</span></li>
+						<li><span class="reason-index" aria-hidden="true">03</span><span>An impact bent several sections or the track</span></li>
+						<li><span class="reason-index" aria-hidden="true">04</span><span>A new system comes with fresh hardware</span></li>
+					</ol>
+				</div>
+			</div>
+			<p class="callout">
+				<strong>Note. </strong>
+				We give you the repair number and, when it is close, the price of a new door too, so the choice is yours.
+			</p>
+		</div>
+	</section>
+
+	<section class="svc-visit is-dark" aria-labelledby="home-emergency-title">
+		<div class="container">
+			<div class="band-head">
+				<p class="band-kicker">On site</p>
+				<h2 id="home-emergency-title">Emergency Garage Door Repairs for Unexpected Mechanical Problems</h2>
+				<p class="band-lead">
+					When a spring snaps or an opener quits without warning, our emergency Garage Door Repair in Fishers gets a crew out fast — day or night — to handle the unexpected mechanical problems that leave your door stuck or unsafe.
+				</p>
+			</div>
+			<ol class="svc-points">
+				<li><span class="reason-index" aria-hidden="true">01</span><span>Garage Door Repair in Fishers starts with a call to {site.phoneDisplay} or the form — tell us the door, the trouble, and your part of town.</span></li>
+				<li><span class="reason-index" aria-hidden="true">02</span><span>The same crew rolls from Glenn Abbey Lane, usually a short drive across Fishers.</span></li>
+				<li><span class="reason-index" aria-hidden="true">03</span><span>On site we check the door by hand, find the failed part, and give you the price before any work.</span></li>
+				<li><span class="reason-index" aria-hidden="true">04</span><span>We make the repair, test the balance and auto-reverse, and leave the door running the way it should.</span></li>
+			</ol>
 		</div>
 	</section>
 
@@ -297,7 +840,7 @@ const faqs = [
 				<p class="band-kicker">Service areas</p>
 				<h2 id="places-title">Fishers and the<br />towns around it</h2>
 				<p>
-					We provide garage door repair, installation, and maintenance throughout Fishers, Indianapolis, and the surrounding communities.
+					We provide garage door repair, installation, and maintenance throughout Fishers and the surrounding communities, with a dedicated page for every town we serve.
 				</p>
 				<div class="places-actions">
 					<a class="btn btn-orange places-all" href="/service-areas">
@@ -309,7 +852,7 @@ const faqs = [
 			</div>
 			<div class="place-grid">
 				{
-					featuredAreas.map((area) => (
+					areas.map((area) => (
 						<a class="place-card" href={`/service-areas/${area.slug}`}>
 							<span class="place-name">
 								<strong>{area.name}</strong>
@@ -346,7 +889,7 @@ const faqs = [
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Recent projects</p>
-				<h2 id="built-title">Built to last</h2>
+				<p class="ui-heading" id="built-title">Built to last</p>
 				<a class="band-more" href="/our-work">View all projects</a>
 			</div>
 			<ProjectCarousel gallery="home-projects" />
@@ -357,7 +900,7 @@ const faqs = [
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Questions</p>
-				<h2 id="faq-title">Before you call</h2>
+				<p class="ui-heading" id="faq-title">Before you call</p>
 			</div>
 			<div class="faq">
 				{
@@ -453,9 +996,12 @@ const faqs = [
 	};
 
 	if (quoteViewport && quoteTrack && quoteNext) {
-		const reviews = await loadReviews();
-		fillReviews(reviews);
-		if (reviews.length > 2) quoteNext.hidden = false;
+		if (quoteTrack.children.length > 2) quoteNext.hidden = false;
+		loadReviews()
+			.then((reviews) => {
+				if (reviews.length >= 3) fillReviews(reviews);
+			})
+			.catch(() => {});
 	}
 
 	if (quoteViewport && quoteTrack && quoteTrack.children.length > 2) {

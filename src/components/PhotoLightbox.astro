@@ -10,7 +10,7 @@
 		</svg>
 	</button>
 	<div class="photo-dialog-frame">
-		<img alt="" />
+		<img alt="Garage door project photo by Goat Garage Door Service" title="Garage door project photo by Goat Garage Door Service" />
 	</div>
 	<button type="button" class="photo-dialog-nav photo-dialog-next" aria-label="Next photo">
 		<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -92,6 +92,7 @@
 			nextButton.hidden = single;
 			dialogImage.src = shot.full;
 			dialogImage.alt = shot.alt;
+			dialogImage.title = shot.caption || shot.alt;
 			caption.textContent = shot.caption;
 			count.textContent = single ? '' : `${index + 1} / ${shots.length}`;
 			dialog.setAttribute('aria-label', shot.caption || shot.alt || 'Photo');
@@ -155,6 +156,7 @@
 		dialog.addEventListener('close', () => {
 			dialogImage.removeAttribute('src');
 			dialogImage.alt = '';
+			dialogImage.title = '';
 			caption.textContent = '';
 			count.textContent = '';
 			dialog.setAttribute('aria-label', 'Photo');

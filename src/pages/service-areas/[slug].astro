@@ -4,9 +4,12 @@ import OfferCarousel from '../../components/OfferCarousel.astro';
 import PageHero from '../../components/PageHero.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import { areas, getArea } from '../../data/areas';
-import { breadcrumbNode, faqNode, pageSchema } from '../../data/schema';
+import { breadcrumbNode, faqNode, graphSchema } from '../../data/schema';
 import { addressLine, site } from '../../data/site';
 import goatHead from '../../assets/images/goat-head.png';
+import { Image } from 'astro:assets';
+import { workById } from '../../data/work';
+import { googleReviews } from '../../data/reviews';
 
 export function getStaticPaths() {
 	return areas.map((area) => ({
@@ -40,30 +43,33 @@ const faqs = [
 	},
 ];
 
-const schema = pageSchema([
+const optimized = (area.seoSections?.length ?? 0) > 0;
+const seoSections = area.seoSections ?? [];
+const seoFirst = seoSections[0];
+const seoRest = seoSections.slice(1);
+const seoFirstPhoto = seoFirst && seoFirst.imageId ? workById(seoFirst.imageId) : null;
+const pageFaqs = area.faqs ?? faqs;
+
+const schema = graphSchema([
 	breadcrumbNode([
 		{ name: 'Home', path: '/' },
 		{ name: 'Service areas', path: '/service-areas' },
 		{ name: area.name, path: `/service-areas/${area.slug}` },
 	]),
-	{
-		'@type': 'Service',
-		name: `Garage door repair in ${area.name}, IN`,
-		areaServed: `${area.name}, Indiana`,
-		provider: { '@id': `${site.domain}/#business` },
-		url: `${site.domain}/service-areas/${area.slug}`,
-		description: area.description,
-	},
-	faqNode(faqs),
+	faqNode(pageFaqs),
 ]);
 ---
 
-<BaseLayout title={`Garage Door Repair in ${area.name}, IN | Goat Garage Door Service`} description={area.description} schema={schema}>
+<BaseLayout
+	title={area.metaTitle ?? `Garage Door Repair in ${area.name}, IN - Goat Garage Door Service`}
+	description={area.metaDescription ?? area.description}
+	schema={schema}
+>
 	<div class="area-page">
 	<div class="hero-stack">
 	<PageHero
-		eyebrow={`${area.county} · ${area.label}`}
-		title={`Garage door repair in ${area.name}`}
+		eyebrow={site.name}
+		title={area.h1 ?? `Garage door repair in ${area.name}`}
 		lead={area.lead}
 		crumbs={[
 			{ label: 'Home', href: '/' },
@@ -113,93 +119,535 @@ const schema = pageSchema([
 	</section>
 	</div>
 
-	<OfferCarousel kicker={area.name} title="Services we bring" titleId="services-title" />
+	{optimized ? (
+		<Fragment>
+			{area.whyChoose && (
+				<section class="reasons" aria-labelledby="why-title">
+					<img class="reasons-mark" src={goatHead.src} width={goatHead.width} height={goatHead.height} alt="Goat Garage Door Service goat logo" title="Goat Garage Door Service" />
+					<div class="container reasons-layout">
+						<div class="reasons-statement">
+							<p class="band-kicker">Why choose us</p>
+							<h2 class="area-name" id="why-title">Why {area.name}<br />calls <span>Goat.</span></h2>
+							<p>A local crew that covers {area.name}, names the price first, and answers day or night.</p>
+						</div>
+						<ol class="reason-list">
+							{area.whyChoose.map((item, index) => (
+								<li>
+									<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+									<div>
+										<strong>{item.title}</strong>
+										<span>{item.text}</span>
+									</div>
+								</li>
+							))}
+						</ol>
+					</div>
+				</section>
+			)}
 
-	<section class="reasons" aria-labelledby="local-title">
-		<img
-			class="reasons-mark"
-			src={goatHead.src}
-			width={goatHead.width}
-			height={goatHead.height}
-			alt=""
-		/>
-		<div class="container reasons-layout">
-			<div class="reasons-statement">
-				<p class="band-kicker">{area.county}</p>
-				<h2 class="area-name" id="local-title">
-					Garage<br />
-					doors in<br />
-					<span>{area.name}.</span>
-				</h2>
-				<p class="area-places">{area.places.join(' · ')}</p>
-				<p>Based at {addressLine}. Hours are {site.hours}.</p>
-				<a class="band-more" href="#quote">Request service</a>
-			</div>
-			<ol class="reason-list reason-copy">
-				{
-					area.paragraphs.map((paragraph, index) => (
-						<li>
-							<span class="reason-index" aria-hidden="true">
-								{String(index + 1).padStart(2, '0')}
-							</span>
-							<div>
-								<span>{paragraph}</span>
-							</div>
-						</li>
-					))
-				}
-			</ol>
-		</div>
-	</section>
+			<OfferCarousel kicker={area.name} title={`Garage door services in ${area.name}`} titleId="services-title" />
 
-	<section class="places is-dark" aria-labelledby="nearby-title">
-		<div class="container places-layout">
-			<div class="places-copy">
-				<p class="band-kicker">Nearby</p>
-				<h2 id="nearby-title">Towns around<br />{area.name}</h2>
-				<p>The same Fishers crew covers these towns on the regular run.</p>
-				<div class="places-actions">
-					<a class="btn btn-orange places-all" href="/service-areas">
-						View all areas
-						<span aria-hidden="true">→</span>
-					</a>
-					<a class="btn btn-line places-call" href={`tel:${site.phoneTel}`}>Call now</a>
-				</div>
-			</div>
-			<div class="place-grid">
-				{
-					nearby.map((item) => (
-						<a class="place-card" href={`/service-areas/${item.slug}`}>
-							<span class="place-name">
-								<strong>{item.name}</strong>
-								<span>{item.county}</span>
-							</span>
-							<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
-								<path
-									fill="currentColor"
-									fill-rule="evenodd"
-									d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
-								/>
+			{seoFirst && (
+				<section class="svc-feature" aria-labelledby={`seo-${seoFirst.id}`}>
+					<div class="container svc-feature-layout">
+						<div class="svc-feature-copy">
+							<p class="band-kicker">Good to know</p>
+							<h2 id={`seo-${seoFirst.id}`}>{seoFirst.h2}</h2>
+							{(seoFirst.paragraphs ?? []).map((paragraph) => <p>{paragraph}</p>)}
+							<a class="btn btn-orange svc-call" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+						</div>
+						{seoFirstPhoto && (
+							<figure class="svc-feature-photo">
+								<Image src={seoFirstPhoto.src} alt={seoFirstPhoto.alt} title={seoFirstPhoto.title} widths={[640, 960]} sizes="(min-width: 900px) 42vw, 100vw" quality={86} />
+							</figure>
+						)}
+					</div>
+				</section>
+			)}
+
+			{area.showTestimonials && (
+				<section class="trusted" aria-labelledby="svc-trusted-title">
+					<div class="container trusted-layout">
+						<div class="trusted-copy">
+							<svg class="trusted-shadow" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor">
+								<path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path>
 							</svg>
-						</a>
-					))
-				}
-			</div>
-		</div>
-		<div class="container places-map">
-			<iframe
-				class="map-frame"
-				title="Goat Garage Door Service on Google Maps"
-				src={site.mapEmbed}
-				loading="lazy"
-				referrerpolicy="no-referrer-when-downgrade"
-				allowfullscreen
-			></iframe>
-			<p>
-				<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
-			</p>
-		</div>
-	</section>
+							<div class="trusted-title">
+								<p class="band-kicker">Testimonials</p>
+								<h2 id="svc-trusted-title">Trusted by our clients</h2>
+							</div>
+							<a class="btn btn-orange rlg-review-trigger" href="/#review">Leave Us A Review</a>
+						</div>
+						<div class="quote-stage">
+							<div class="quote-viewport" data-quote-viewport aria-roledescription="carousel" aria-label="Five-star Google reviews">
+								<div class="quote-track" data-quote-track>
+									{
+										googleReviews.map((review) => (
+											<blockquote class="quote-card">
+												<svg class="quote-mark" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor"><path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path></svg>
+												<p>{review.quote}</p>
+												<footer>
+													<strong>{review.name}</strong>
+													<span>5-star Google review</span>
+												</footer>
+											</blockquote>
+										))
+									}
+								</div>
+							</div>
+							<button class="quote-next" type="button" aria-label="Next reviews" hidden>
+								<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4">
+									<path d="M9 5l7 7-7 7"></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<script is:inline>
+						(function () {
+							const quoteViewport = document.querySelector('[data-quote-viewport]');
+							const quoteTrack = document.querySelector('[data-quote-track]');
+							const quoteNext = document.querySelector('.quote-next');
+							const quoteMark =
+								'<svg class="quote-mark" viewBox="0 0 78 46" aria-hidden="true" fill="currentColor"><path d="M17.2 46C7.6 46 1.2 39.2 1.2 28.8 1.2 16.2 7.4 6.4 19.6 1.2l4.2 6.4C15.2 11.2 11.4 16.6 10.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C26 39 22.2 46 17.2 46zm36 0C43.6 46 37.2 39.2 37.2 28.8 37.2 16.2 43.4 6.4 55.6 1.2l4.2 6.4C51.2 11.2 47.4 16.6 46.6 23.2c1.4-.6 3-1 4.8-1 6.2 0 10.6 4.2 10.6 10.4C62 39 58.2 46 53.2 46z"></path></svg>';
+
+							const fillReviews = (reviews) => {
+								quoteTrack.replaceChildren(
+									...reviews.map((review) => {
+										const card = document.createElement('blockquote');
+										card.className = 'quote-card';
+										card.innerHTML = `${quoteMark}<p></p><footer><strong></strong><span>5-star Google review</span></footer>`;
+										card.querySelector('p').textContent = review.quote;
+										card.querySelector('strong').textContent = review.name;
+										return card;
+									}),
+								);
+							};
+
+							const loadReviews = async () => {
+								const response = await fetch('/api/google-reviews');
+								if (!response.ok) return [];
+								const data = await response.json();
+								return Array.isArray(data.reviews) ? data.reviews : [];
+							};
+
+							if (quoteViewport && quoteTrack && quoteNext) {
+								if (quoteTrack.children.length > 2) quoteNext.hidden = false;
+								loadReviews()
+									.then((reviews) => {
+										if (reviews.length >= 3) fillReviews(reviews);
+									})
+									.catch(() => {});
+							}
+
+							if (quoteViewport && quoteTrack && quoteTrack.children.length > 2) {
+								const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+								const ease = 'transform 0.7s cubic-bezier(.22, .7, .28, 1)';
+								let moving = false;
+								let moveToken = 0;
+								let direction = 1;
+								let timer = 0;
+								let pointerId = null;
+								let originX = 0;
+								let deltaX = 0;
+
+								const distance = () => {
+									const card = quoteTrack.firstElementChild;
+									if (!card) return 0;
+									const gap = parseFloat(getComputedStyle(quoteTrack).columnGap || getComputedStyle(quoteTrack).gap) || 0;
+									return card.getBoundingClientRect().width + gap;
+								};
+
+								const settle = (token) => {
+									if (!moving || token !== moveToken) return;
+									if (direction === 1) quoteTrack.appendChild(quoteTrack.firstElementChild);
+									quoteTrack.style.transition = 'none';
+									quoteTrack.style.transform = 'translate3d(0, 0, 0)';
+									void quoteTrack.offsetWidth;
+									moving = false;
+								};
+
+								const arm = () => {
+									moving = true;
+									const token = ++moveToken;
+									window.setTimeout(() => settle(token), 800);
+									return token;
+								};
+
+								const goNext = () => {
+									const shift = distance();
+									if (!shift || moving) return;
+									direction = 1;
+									if (reduceMotion) {
+										quoteTrack.appendChild(quoteTrack.firstElementChild);
+										return;
+									}
+									arm();
+									quoteTrack.style.transition = ease;
+									quoteTrack.style.transform = `translate3d(${-shift}px, 0, 0)`;
+								};
+
+								const goPrev = () => {
+									const shift = distance();
+									if (!shift || moving) return;
+									direction = -1;
+									quoteTrack.insertBefore(quoteTrack.lastElementChild, quoteTrack.firstElementChild);
+									if (reduceMotion) return;
+									arm();
+									quoteTrack.style.transition = 'none';
+									quoteTrack.style.transform = `translate3d(${-shift}px, 0, 0)`;
+									void quoteTrack.offsetWidth;
+									quoteTrack.style.transition = ease;
+									quoteTrack.style.transform = 'translate3d(0, 0, 0)';
+								};
+
+								quoteTrack.addEventListener('transitionend', (event) => {
+									if (event.target !== quoteTrack || event.propertyName !== 'transform') return;
+									settle(moveToken);
+								});
+
+								const stop = () => window.clearInterval(timer);
+								const start = () => {
+									if (reduceMotion) return;
+									stop();
+									timer = window.setInterval(goNext, 5200);
+								};
+
+								quoteNext?.addEventListener('click', () => {
+									goNext();
+									start();
+								});
+
+								quoteViewport.addEventListener('keydown', (event) => {
+									if (event.key === 'ArrowRight') {
+										event.preventDefault();
+										goNext();
+										start();
+									} else if (event.key === 'ArrowLeft') {
+										event.preventDefault();
+										goPrev();
+										start();
+									}
+								});
+
+								quoteViewport.addEventListener('mouseenter', stop);
+								quoteViewport.addEventListener('mouseleave', start);
+								quoteViewport.addEventListener('focusin', stop);
+								quoteViewport.addEventListener('focusout', (event) => {
+									if (!quoteViewport.contains(event.relatedTarget)) start();
+								});
+								document.addEventListener('visibilitychange', () => {
+									if (document.hidden) stop();
+									else start();
+								});
+								window.addEventListener('resize', () => {
+									moveToken += 1;
+									quoteTrack.style.transition = 'none';
+									quoteTrack.style.transform = 'translate3d(0, 0, 0)';
+									moving = false;
+								});
+
+								quoteViewport.addEventListener('pointerdown', (event) => {
+									if (event.button !== 0 || event.target.closest('.quote-next')) return;
+									pointerId = event.pointerId;
+									originX = event.clientX;
+									deltaX = 0;
+								});
+								quoteViewport.addEventListener('pointermove', (event) => {
+									if (event.pointerId !== pointerId) return;
+									deltaX = event.clientX - originX;
+									if (Math.abs(deltaX) > 48) quoteViewport.setPointerCapture(event.pointerId);
+								});
+								const endPointer = (event) => {
+									if (event.pointerId !== pointerId) return;
+									pointerId = null;
+									if (Math.abs(deltaX) > 48) {
+										if (deltaX < 0) goNext();
+										else goPrev();
+										start();
+									}
+									deltaX = 0;
+								};
+								quoteViewport.addEventListener('pointerup', endPointer);
+								quoteViewport.addEventListener('pointercancel', endPointer);
+
+								start();
+							}
+						})();
+					</script>
+				</section>
+			)}
+
+			{area.process && (
+				<section class="svc-process" aria-labelledby="process-title">
+					<div class="container">
+						<div class="band-head">
+							<p class="band-kicker">The visit</p>
+							<h2 id="process-title">How a repair call in {area.name} goes</h2>
+						</div>
+						<ol class="svc-process-grid">
+							{area.process.map((step, index) => (
+								<li class="svc-process-step">
+									<span class="svc-process-num" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+									<strong>{step.title}</strong>
+									<p>{step.text}</p>
+								</li>
+							))}
+						</ol>
+					</div>
+				</section>
+			)}
+
+			{seoRest.map((sec) => (
+				sec.layout === 'causes' ? (
+					<section class="reasons is-dark" aria-labelledby={`seo-${sec.id}`}>
+						<div class="container reasons-layout">
+							<div class="reasons-statement">
+								<p class="band-kicker">Good to know</p>
+								<h2 class="area-name" id={`seo-${sec.id}`}>{sec.h2}</h2>
+								{sec.intro && <p>{sec.intro}</p>}
+								<a class="band-more" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+							</div>
+							<ol class="reason-list">
+								{(sec.items ?? []).map((item, index) => (
+									<li>
+										<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+										<div>
+											{item.title && <strong>{item.title}</strong>}
+											<span>{item.text}</span>
+										</div>
+									</li>
+								))}
+							</ol>
+						</div>
+					</section>
+				) : sec.layout === 'compare' ? (
+					<section class="svc-visit" aria-labelledby={`seo-${sec.id}`}>
+						<div class="container">
+							<div class="band-head">
+								<p class="band-kicker">Good to know</p>
+								<h2 id={`seo-${sec.id}`}>{sec.h2}</h2>
+								{sec.intro && <p class="band-lead">{sec.intro}</p>}
+							</div>
+							<div class="svc-visit-grid">
+								{(sec.columns ?? []).map((column) => (
+									<div>
+										<h3>{column.heading}</h3>
+										<ol class="svc-points">
+											{column.points.map((point, index) => (
+												<li>
+													<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+													<span>{point}</span>
+												</li>
+											))}
+										</ol>
+									</div>
+								))}
+							</div>
+							{sec.note && (
+								<p class="callout">
+									<strong>Note. </strong>
+									{sec.note}
+								</p>
+							)}
+						</div>
+					</section>
+				) : (
+					<section class="svc-visit is-dark" aria-labelledby={`seo-${sec.id}`}>
+						<div class="container">
+							<div class="band-head">
+								<p class="band-kicker">On site</p>
+								<h2 id={`seo-${sec.id}`}>{sec.h2}</h2>
+								{sec.intro && <p class="band-lead">{sec.intro}</p>}
+							</div>
+							<ol class="svc-points">
+								{(sec.items ?? []).map((item, index) => (
+									<li>
+										<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+										<span>{item.text}</span>
+									</li>
+								))}
+							</ol>
+						</div>
+					</section>
+				)
+			))}
+
+			{area.poi && (
+				<section class="places" aria-labelledby="poi-title">
+					<div class="container places-layout">
+						<div class="places-copy">
+							<p class="band-kicker">Local area</p>
+							<h2 id="poi-title">{area.name} points of interest<br />and driving directions</h2>
+							<p>{area.poi.intro}</p>
+							<a class="btn btn-orange" href={`tel:${site.phoneTel}`}>Call {site.phoneDisplay}</a>
+						</div>
+						<ol class="reason-list">
+							{area.poi.items.map((item, index) => (
+								<li>
+									<span class="reason-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+									<div>
+										{item.title && <strong>{item.title}</strong>}
+										<span>{item.text}</span>
+									</div>
+								</li>
+							))}
+						</ol>
+					</div>
+					<div class="container places-map">
+						<iframe
+							class="map-frame"
+							title={area.poi.mapTitle}
+							src={area.poi.mapSrc}
+							loading="lazy"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+						></iframe>
+					</div>
+				</section>
+			)}
+
+			<section class="places is-dark" aria-labelledby="nearby-title">
+				<div class="container places-layout">
+					<div class="places-copy">
+						<p class="band-kicker">Neighborhoods</p>
+						<h2 id="nearby-title">{area.name} neighborhoods<br />and nearby towns</h2>
+						<p>{area.places.join(' · ')}</p>
+						<p>The same local crew covers these {area.name} areas and the towns around the city.</p>
+						<div class="places-actions">
+							<a class="btn btn-orange places-all" href="/service-areas">
+								View all areas
+								<span aria-hidden="true">→</span>
+							</a>
+							<a class="btn btn-line places-call" href={`tel:${site.phoneTel}`}>Call now</a>
+						</div>
+					</div>
+					<div class="place-grid">
+						{
+							nearby.map((item) => (
+								<a class="place-card" href={`/service-areas/${item.slug}`}>
+									<span class="place-name">
+										<strong>{item.name}</strong>
+										<span>{item.county}</span>
+									</span>
+									<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
+										<path
+											fill="currentColor"
+											fill-rule="evenodd"
+											d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+										/>
+									</svg>
+								</a>
+							))
+						}
+					</div>
+				</div>
+				<div class="container places-map">
+					<iframe
+						class="map-frame"
+						title="Goat Garage Door Service on Google Maps"
+						src={site.mapEmbed}
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"
+						allowfullscreen
+					></iframe>
+					<p>
+						<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
+					</p>
+				</div>
+			</section>
+		</Fragment>
+	) : (
+		<Fragment>
+			<OfferCarousel kicker={area.name} title="Services we bring" titleId="services-title" />
+
+			<section class="reasons" aria-labelledby="local-title">
+				<img
+					class="reasons-mark"
+					src={goatHead.src}
+					width={goatHead.width}
+					height={goatHead.height}
+					alt="Goat Garage Door Service goat logo"
+					title="Goat Garage Door Service"
+				/>
+				<div class="container reasons-layout">
+					<div class="reasons-statement">
+						<p class="band-kicker">{area.county}</p>
+						<h2 class="area-name" id="local-title">
+							Garage<br />
+							doors in<br />
+							<span>{area.name}.</span>
+						</h2>
+						<p class="area-places">{area.places.join(' · ')}</p>
+						<p>Based at {addressLine}. Hours are {site.hours}.</p>
+						<a class="band-more" href="#quote">Request service</a>
+					</div>
+					<ol class="reason-list reason-copy">
+						{
+							area.paragraphs.map((paragraph, index) => (
+								<li>
+									<span class="reason-index" aria-hidden="true">
+										{String(index + 1).padStart(2, '0')}
+									</span>
+									<div>
+										<span>{paragraph}</span>
+									</div>
+								</li>
+							))
+						}
+					</ol>
+				</div>
+			</section>
+
+			<section class="places is-dark" aria-labelledby="nearby-title">
+				<div class="container places-layout">
+					<div class="places-copy">
+						<p class="band-kicker">Nearby</p>
+						<h2 id="nearby-title">Towns around<br />{area.name}</h2>
+						<p>The same local crew covers these towns on the regular run.</p>
+						<div class="places-actions">
+							<a class="btn btn-orange places-all" href="/service-areas">
+								View all areas
+								<span aria-hidden="true">→</span>
+							</a>
+							<a class="btn btn-line places-call" href={`tel:${site.phoneTel}`}>Call now</a>
+						</div>
+					</div>
+					<div class="place-grid">
+						{
+							nearby.map((item) => (
+								<a class="place-card" href={`/service-areas/${item.slug}`}>
+									<span class="place-name">
+										<strong>{item.name}</strong>
+										<span>{item.county}</span>
+									</span>
+									<svg class="place-pin" viewBox="0 0 24 24" aria-hidden="true">
+										<path
+											fill="currentColor"
+											fill-rule="evenodd"
+											d="M12 2.15a6.85 6.85 0 0 0-6.85 6.95c0 5.15 6.85 12.75 6.85 12.75s6.85-7.6 6.85-12.75A6.85 6.85 0 0 0 12 2.15zm0 9.35a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+										/>
+									</svg>
+								</a>
+							))
+						}
+					</div>
+				</div>
+				<div class="container places-map">
+					<iframe
+						class="map-frame"
+						title="Goat Garage Door Service on Google Maps"
+						src={site.mapEmbed}
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"
+						allowfullscreen
+					></iframe>
+					<p>
+						<a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">Open the listing in Google Maps</a>
+					</p>
+				</div>
+			</section>
+		</Fragment>
+	)}
 
 	<section class="svc-quote" id="quote">
 		<div class="container svc-quote-layout">
@@ -217,11 +665,11 @@ const schema = pageSchema([
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Questions</p>
-				<h2 id="faq-title">Before you call</h2>
+				<p class="ui-heading" id="faq-title">Before you call</p>
 			</div>
 			<div class="faq">
 				{
-					faqs.map((faq) => (
+					pageFaqs.map((faq) => (
 						<details>
 							<summary>{faq.q}</summary>
 							<p>{faq.a}</p>

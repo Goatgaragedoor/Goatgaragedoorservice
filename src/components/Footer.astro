@@ -5,7 +5,7 @@ import { site } from '../data/site';
 import logo from '../assets/images/logo-mark.png';
 
 const footerServices = [
-	'garage-door-repair',
+	'off-track-garage-door-repair',
 	'garage-door-spring-replacement',
 	'garage-door-opener-installation',
 	'garage-door-installation',
@@ -20,14 +20,14 @@ const footerServices = [
 	<div class="container footer-grid">
 		<div class="footer-brand">
 			<a class="footer-logo" href="/" aria-label={site.name}>
-				<Image src={logo} alt="" width={168} height={184} densities={[1, 2]} quality={90} />
+				<Image src={logo} alt="Goat Garage Door Service logo" title="Goat Garage Door Service" width={168} height={184} densities={[1, 2]} quality={90} />
 			</a>
 			<p>
 				Residential garage door repair and installation for Fishers, Indianapolis, and the surrounding area.
 			</p>
 		</div>
-		<div>
-			<h2>Quick Links</h2>
+		<div class="footer-col footer-links">
+			<p class="ui-heading">Quick Links</p>
 			<ul>
 				<li><a href="/">Home</a></li>
 				<li><a href="/about">About</a></li>
@@ -37,8 +37,8 @@ const footerServices = [
 				<li><a href="/contact">Contact</a></li>
 			</ul>
 		</div>
-		<div>
-			<h2>Our Services</h2>
+		<div class="footer-col footer-services">
+			<p class="ui-heading">Our Services</p>
 			<ul>
 				{
 					footerServices.map((service) => (
@@ -50,7 +50,7 @@ const footerServices = [
 			</ul>
 		</div>
 		<div>
-			<h2>Contact Us</h2>
+			<p class="ui-heading">Contact Us</p>
 			<ul class="footer-contact">
 				<li>
 					<a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a>

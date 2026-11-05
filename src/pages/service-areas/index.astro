@@ -3,7 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import OfferCarousel from '../../components/OfferCarousel.astro';
 import PageHero from '../../components/PageHero.astro';
 import { areas } from '../../data/areas';
-import { breadcrumbNode, faqNode, pageSchema } from '../../data/schema';
 import { addressLine, site } from '../../data/site';
 
 const faqs = [
@@ -30,15 +29,8 @@ const faqs = [
 ---
 
 <BaseLayout
-	title="Garage Door Service Areas | Fishers & Indianapolis"
+	title="Garage Door Service Areas - Fishers & Indianapolis"
 	description="Goat Garage Door Service covers Fishers, Indianapolis, Carmel, Greenwood, Anderson, Brownsburg, Greenfield, and nearby towns. Call 317-854-6917."
-	schema={pageSchema([
-		breadcrumbNode([
-			{ name: 'Home', path: '/' },
-			{ name: 'Service areas', path: '/service-areas' },
-		]),
-		faqNode(faqs),
-	])}
 >
 	<div class="area-page">
 	<div class="hero-stack">
@@ -149,7 +141,7 @@ const faqs = [
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Questions</p>
-				<h2 id="faq-title">Before you call</h2>
+				<p class="ui-heading" id="faq-title">Before you call</p>
 			</div>
 			<div class="faq">
 				{

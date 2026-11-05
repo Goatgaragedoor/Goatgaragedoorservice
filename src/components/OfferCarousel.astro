@@ -35,7 +35,6 @@ const offerIcons = {
 };
 
 const offerIconBySlug: Record<string, string> = {
-	'emergency-garage-door-repair': offerIcons.repair,
 	'garage-door-bottom-seal-replacement': offerIcons.seal,
 	'garage-door-cable-replacement': offerIcons.cable,
 	'garage-door-installation': offerIcons.home,
@@ -43,8 +42,10 @@ const offerIconBySlug: Record<string, string> = {
 	'garage-door-opener-installation': offerIcons.home,
 	'garage-door-opener-repair': offerIcons.opener,
 	'garage-door-panel-replacement': offerIcons.panel,
-	'garage-door-repair': offerIcons.repair,
+	'off-track-garage-door-repair': offerIcons.repair,
+	'garage-door-roller-replacement': offerIcons.spring,
 	'garage-door-spring-replacement': offerIcons.spring,
+	'commercial-garage-door-repair-installation': offerIcons.home,
 };
 
 const offer = services.map((service) => ({
@@ -83,7 +84,7 @@ const offer = services.map((service) => ({
 								<span class="offer-media">
 									<Image
 										src={item.image.src}
-										alt=""
+										alt={item.image.alt} title={item.image.title}
 										widths={[480, 800]}
 										sizes="(min-width: 900px) 360px, (min-width: 640px) 50vw, 100vw"
 										quality={86}

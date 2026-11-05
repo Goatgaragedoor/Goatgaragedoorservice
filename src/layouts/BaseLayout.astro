@@ -12,7 +12,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PhotoCta from '../components/PhotoCta.astro';
 import PhotoLightbox from '../components/PhotoLightbox.astro';
-import { pageSchema } from '../data/schema';
 import { routePath, site } from '../data/site';
 
 interface Props {
@@ -25,7 +24,7 @@ interface Props {
 
 const { title, description, noindex = false, schema, showPhotoCta = true } = Astro.props;
 const canonical = new URL(routePath(Astro.url.pathname), site.domain).href;
-const jsonLd = JSON.stringify(schema ?? pageSchema()).replace(/</g, '\\u003c');
+const jsonLd = schema ? JSON.stringify(schema).replace(/</g, '\\u003c') : null;
 ---
 
 <!doctype html>
@@ -36,6 +35,7 @@ const jsonLd = JSON.stringify(schema ?? pageSchema()).replace(/</g, '\\u003c');
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<meta name="google-site-verification" content="xhDBA5T5MW47960LNvXz2e_075ylxMLLtxqCSpAbjf0" />
 		<link rel="canonical" href={canonical} />
 		{noindex && <meta name="robots" content="noindex" />}
 		<meta name="theme-color" content="#14181c" />
@@ -56,7 +56,7 @@ const jsonLd = JSON.stringify(schema ?? pageSchema()).replace(/</g, '\\u003c');
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={`${site.domain}/og.jpg`} />
-		<script type="application/ld+json" set:html={jsonLd} />
+		{jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
 	</head>
 	<body>
 		<Header />

@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ProjectCarousel from '../components/ProjectCarousel.astro';
 import { areas } from '../data/areas';
-import { breadcrumbNode, faqNode, pageSchema } from '../data/schema';
 import { addressLine, site } from '../data/site';
 import goatHead from '../assets/images/goat-head.png';
 
@@ -27,7 +26,6 @@ const straight = [
 ];
 
 const featuredAreaSlugs = [
-	'fishers',
 	'indianapolis',
 	'carmel',
 	'noblesville',
@@ -36,6 +34,7 @@ const featuredAreaSlugs = [
 	'zionsville',
 	'greenwood',
 	'brownsburg',
+	'fortville',
 ];
 
 const featuredAreas = featuredAreaSlugs.map((slug) => {
@@ -65,15 +64,8 @@ const faqs = [
 ---
 
 <BaseLayout
-	title="About Goat Garage Door Service | Fishers, IN"
+	title="About Goat Garage Door Service - Fishers, IN"
 	description="Goat Garage Door Service is based at 10378 Glenn Abbey Ln in Fishers and works across the Indianapolis area, day and night. Call 317-854-6917."
-	schema={pageSchema([
-		breadcrumbNode([
-			{ name: 'Home', path: '/' },
-			{ name: 'About', path: '/about' },
-		]),
-		faqNode(faqs),
-	])}
 >
 	<div class="hero-stack">
 	<PageHero
@@ -132,7 +124,8 @@ const faqs = [
 			src={goatHead.src}
 			width={goatHead.width}
 			height={goatHead.height}
-			alt=""
+			alt="Goat Garage Door Service goat logo"
+			title="Goat Garage Door Service"
 		/>
 		<div class="container reasons-layout">
 			<div class="reasons-statement">
@@ -160,6 +153,7 @@ const faqs = [
 						width="160"
 						height="82"
 						alt="Goat Garage Door Service BBB Business Review"
+						title="Goat Garage Door Service BBB Business Review"
 					/>
 				</a>
 			</div>
@@ -281,7 +275,7 @@ const faqs = [
 		<div class="container">
 			<div class="band-head">
 				<p class="band-kicker">Questions</p>
-				<h2 id="faq-title">Before you call</h2>
+				<p class="ui-heading" id="faq-title">Before you call</p>
 			</div>
 			<div class="faq">
 				{

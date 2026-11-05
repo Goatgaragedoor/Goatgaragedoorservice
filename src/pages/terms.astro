@@ -1,21 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import { breadcrumbNode, pageSchema } from '../data/schema';
-import { site } from '../data/site';
+import { addressLine, site } from '../data/site';
 
-const updated = 'October 28, 2026';
+const updated = 'November 5, 2026';
 ---
 
 <BaseLayout
-	title="Terms & Conditions | Goat Garage Door Service"
-	description="Terms for using the Goat Garage Door Service website and for requesting residential garage door repair or installation."
-	schema={pageSchema([
-		breadcrumbNode([
-			{ name: 'Home', path: '/' },
-			{ name: 'Terms & Conditions', path: '/terms' },
-		]),
-	])}
+	title="Terms & Conditions - Goat Garage Door Service"
+	description="The terms for using the Goat Garage Door Service website and for requesting residential garage door repair or installation in Fishers, IN."
 >
 	<PageHero
 		title="Terms & Conditions"
@@ -27,96 +20,142 @@ const updated = 'October 28, 2026';
 	/>
 	<section class="section">
 		<div class="container prose" style="max-width: 760px;">
-			<p>Last updated {updated}.</p>
+			<p><strong>Last Updated: {updated}</strong></p>
+
+			<h2>1. Introduction</h2>
+			<p>Welcome to {site.name} ("we", "our", or "us").</p>
 			<p>
-				These terms cover {site.domain.replace('https://', '')} and a request for garage door service from {site.name}.
-				We are based at {site.address.street}, {site.address.city}, {site.address.region} {site.address.postalCode}.
-				Using the site means you agree to these terms. If you do not, please leave the site and call or email instead.
+				These Terms &amp; Conditions govern your access to and use of our website, located at
+				<a href={site.domain}>{site.domain}</a>.
+			</p>
+			<p>
+				By accessing or using this website, you agree to these Terms &amp; Conditions. If you do not agree with these terms,
+				please discontinue using the website.
+			</p>
+			<p>
+				These terms apply to your use of the website and its content. Any separate agreement for services requested or provided
+				by our business may be subject to additional terms and conditions.
 			</p>
 
-			<h2>Quotes and the work</h2>
+			<h2>2. Use of Website</h2>
 			<p>
-				The form asks for a free, no-obligation estimate. Sending it, or calling, does not hire us and does not lock in a price.
-				We look at the door, tell you what failed, and give you the price before the repair starts. You can decline.
+				You agree to use this website only for lawful purposes and in a manner that does not violate applicable laws, infringe
+				the rights of others, or interfere with another person's ability to access and use the website.
 			</p>
-			<p>
-				A price covers the work we described. If we open the door and find a different problem — a second spring, a bad cable, a section that will not take a new seal — we stop and tell you before that extra work goes ahead.
-				Pages on this site describe typical jobs. They are not a quote for your door.
-			</p>
-
-			<h2>Scheduling and where we work</h2>
-			<p>
-				Hours are {site.hours}. Emergency calls are for a door that leaves the house open, traps the cars, or is hanging crooked.
-				Planned installs and other non-urgent work are scheduled when we follow up.
-			</p>
-			<p>
-				We serve Fishers, Indianapolis, and the surrounding towns listed on the service area pages. If a job is outside that area, we will say so before we come out.
-				Arrival times are estimates. Weather, traffic, and a door that is unsafe to leave can change the order of the day.
-			</p>
-
-			<h2>At the house</h2>
-			<p>Please have the following ready when we arrive:</p>
+			<p>You must not:</p>
 			<ul>
-				<li>A clear path to the door, with cars and stored items moved off the tracks and the floor in front of the door</li>
-				<li>Someone 18 or older who can approve the price</li>
-				<li>Pets kept away from the work area</li>
-				<li>Power to the opener, unless you have already unplugged it because it is grinding or reversing on its own</li>
+				<li>Use the website for fraudulent, unlawful, or misleading activities.</li>
+				<li>Attempt to gain unauthorized access to the website, its server, or related systems.</li>
+				<li>Distribute malicious software, harmful code, or other content that may damage the website or its users.</li>
+				<li>Interfere with the website's operation, security, or availability.</li>
+				<li>Copy, reproduce, or misuse website content without appropriate authorization.</li>
 			</ul>
 			<p>
-				Springs and cables are under tension. Please leave a broken spring, a loose cable, or a crooked door alone until we get there.
-				Do not wind a spring, pull the red release on a door the springs no longer balance, or keep cycling an opener that is straining.
+				We reserve the right to restrict or suspend access to the website if we reasonably believe someone is violating these
+				Terms &amp; Conditions or misusing the website.
 			</p>
 
-			<h2>Payment</h2>
+			<h2>3. Intellectual Property</h2>
 			<p>
-				Payment is due when the work we agreed on is finished, unless the written quote for that job says otherwise.
-				The quote or invoice for the visit is the record of the price, the parts, and any warranty we offered on that job.
+				Unless otherwise stated, the content available on this website, including text, images, graphics, logos, branding,
+				design elements, and other materials, belongs to {site.name} or is used with appropriate permission.
+			</p>
+			<p>This content is protected by applicable intellectual property laws.</p>
+			<p>You may access and view website content for personal and informational purposes.</p>
+			<p>
+				You may not reproduce, distribute, modify, republish, commercially exploit, or otherwise use website content without
+				prior written permission from the appropriate rights holder, unless permitted by law.
+			</p>
+			<p>All third-party names, trademarks, and logos appearing on this website remain the property of their respective owners.</p>
+
+			<h2>4. User Content</h2>
+			<p>
+				If our website allows you to submit comments, reviews, messages, photographs, or other content, you are responsible for
+				the material you provide.
+			</p>
+			<p>You agree that submitted content will not:</p>
+			<ul>
+				<li>Violate applicable laws or regulations.</li>
+				<li>Infringe another person's intellectual property or privacy rights.</li>
+				<li>Contain fraudulent, misleading, abusive, or defamatory material.</li>
+				<li>Include malicious software or harmful links.</li>
+				<li>Be used to harass, threaten, or harm others.</li>
+			</ul>
+			<p>By submitting content, you confirm that you have the necessary rights and permissions to provide it.</p>
+			<p>
+				We reserve the right to review, remove, or restrict access to submitted content that violates these terms or is
+				otherwise inappropriate.
 			</p>
 
-			<h2>Parts and warranties</h2>
+			<h2>5. Links to Other Websites</h2>
 			<p>
-				Any warranty on labor or on a part we install is the warranty written on the quote or invoice for that job.
-				A manufacturer’s warranty, when one applies, comes from the part maker and follows that maker’s terms.
-				Descriptions, photos, and service pages on this website are not a warranty.
+				Our website may contain links to third-party websites, services, maps, videos, or other external content for convenience
+				and informational purposes.
+			</p>
+			<p>These external websites are operated independently and may have their own terms, privacy policies, and practices.</p>
+			<p>
+				We do not control or take responsibility for the content, availability, accuracy, security, or privacy practices of
+				third-party websites.
+			</p>
+			<p>
+				Accessing external websites through links on our website is at your own discretion. We recommend reviewing the applicable
+				terms and privacy policies of those websites.
 			</p>
 
-			<h2>The website</h2>
+			<h2>6. Limitation of Liability</h2>
 			<p>
-				Text, photos, and the logo belong to {site.name}. You may look at them and share a link to a page.
-				Please do not copy the photos, the logo, or page text for your own site or ads.
+				We make reasonable efforts to keep our website information accurate and available. However, we do not guarantee that the
+				website will always be accessible, uninterrupted, error-free, or free from harmful components.
 			</p>
 			<p>
-				We try to keep the site accurate. Service descriptions can change, and a page can be out of date.
-				The site may be unavailable while it is updated or while the host has an outage.
-				Links to maps, Facebook, or other sites leave our site, and those sites have their own terms.
+				Information provided on this website is intended for general informational purposes. Website content should not be treated
+				as a substitute for an inspection, professional assessment, written estimate, or separate service agreement.
 			</p>
 			<p>
-				The service form is delivered through Netlify so we can read it. How we handle what you send is on the
-				<a href="/privacy">privacy policy</a>.
+				To the extent permitted by applicable law, {site.name} will not be liable for losses or damages arising directly from
+				your access to or inability to use the website, reliance on general website information, or use of third-party websites
+				linked from our pages.
 			</p>
-
-			<h2>Liability</h2>
 			<p>
-				To the extent Indiana law allows, {site.name} is not liable for indirect or consequential damages from using this website, from a form that does not arrive, or from a delay in answering a request.
-				Nothing on this page limits liability that Indiana law does not allow a service business to limit.
+				Nothing in these Terms &amp; Conditions excludes or limits liability where such exclusion or limitation is prohibited by
+				applicable law.
 			</p>
 
-			<h2>Indiana law</h2>
+			<h2>7. Changes to Terms</h2>
 			<p>
-				These terms are governed by the laws of the State of Indiana. Disputes about the website or a request for service are handled in the state or federal courts located in Indiana.
+				We may update or revise these Terms &amp; Conditions from time to time to reflect changes to our website, business
+				practices, or applicable requirements.
+			</p>
+			<p>
+				When changes are made, the revised terms will be published on this page and the Last Updated date will be updated
+				accordingly.
+			</p>
+			<p>
+				Your continued use of the website after revised terms are published indicates your acceptance of the updated Terms &amp;
+				Conditions.
+			</p>
+			<p>We encourage visitors to review this page periodically.</p>
+
+			<h2>8. Governing Law</h2>
+			<p>
+				These Terms &amp; Conditions are governed by the laws applicable to the State of Indiana, United States, without regard
+				to conflict-of-law principles, to the extent permitted by applicable law.
+			</p>
+			<p>
+				Any disputes relating to the use of this website will be handled in accordance with the applicable laws and legal
+				requirements of the relevant jurisdiction.
 			</p>
 
-			<h2>Changes</h2>
+			<h2>9. Contact</h2>
 			<p>
-				We can update these terms by posting a new version on this page. The date at the top is the date of the current version.
-				A job already quoted keeps the terms we gave you with that quote.
+				If you have questions about these Terms &amp; Conditions or need further information regarding the use of our website,
+				please contact us:
 			</p>
-
-			<h2>Contact</h2>
-			<p>
-				Questions about these terms: call <a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a> or email
-				<a href={`mailto:${site.email}`}>{site.email}</a>.
-			</p>
+			<p><strong>Business Name:</strong> {site.name}</p>
+			<p><strong>Website:</strong> <a href={site.domain}>{site.domain}</a></p>
+			<p><strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></p>
+			<p><strong>Phone:</strong> <a href={`tel:${site.phoneTel}`}>{site.phoneDisplay}</a></p>
+			<p><strong>Business Address:</strong> {addressLine}</p>
 		</div>
 	</section>
 </BaseLayout>
