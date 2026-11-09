@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog | Goatgaragedoorservice</title>
+  
+  <link rel="canonical" href="https://goatgaragedoorindy.com/blogs/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Blog | Goatgaragedoorservice" />
+  
+  <meta property="og:url" content="https://goatgaragedoorindy.com/blogs/" />
+  
+  
+  <link rel="icon" type="image/png" href="https://goatgaragedoorindy.com/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="https://goatgaragedoorindy.com/apple-touch-icon.png">
+  <link rel="stylesheet" href="https://goatgaragedoorindy.com/_astro/BaseLayout.DxoRzWxl.css">
+  <style rel="stylesheet" type="text/css">@charset "utf-8";
+
+.rlg-review-trigger { align-self: flex-start; margin-top: 1.35rem; }
+
+.rlg-popup-overlay { backdrop-filter: blur(4px); z-index: 999999; background-color: rgba(0, 0, 0, 0.6); width: 100%; height: 100%; animation: 0.2s ease 0s 1 normal none running rlgFadeIn; display: none; position: fixed; top: 0px; left: 0px; }
+
+@keyframes rlgFadeIn { 
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.rlg-popup-content { background: rgb(255, 255, 255); border-radius: 16px; width: 90%; max-width: 480px; margin: 5% auto; padding: 32px; animation: 0.3s ease 0s 1 normal none running rlgSlideUp; position: relative; box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px; }
+
+@keyframes rlgSlideUp { 
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+
+.rlg-close { color: rgb(156, 163, 175); cursor: pointer; font-size: 28px; line-height: 1; transition: color 0.2s; position: absolute; top: 16px; right: 20px; }
+
+.rlg-close:hover { color: rgb(55, 65, 81); }
+
+.rlg-review-container { text-align: center; }
+
+.rlg-review-container > h3 { font-size: 1.5rem; }
+
+.rlg-review-container > p { color: rgb(107, 114, 128); margin: 0px 0px 24px; font-size: 15px; }
+
+.rlg-star-rating-wrapper { flex-direction: column; align-items: center; gap: 16px; margin-bottom: 24px; display: flex; }
+
+.rlg-star-rating { flex-direction: row-reverse; font-size: 36px; display: inline-flex; }
+
+.rlg-star-rating input { display: none; }
+
+.rlg-star-rating label { color: rgb(229, 231, 235); cursor: pointer; margin: 0px 2px; transition: color 0.15s, transform 0.15s; }
+
+.rlg-star-rating label:hover { transform: scale(1.1); }
+
+.rlg-star-rating input:checked ~ label, .rlg-star-rating label:hover, .rlg-star-rating label:hover ~ label { color: rgb(251, 191, 36); }
+
+.rlg-submit-btn { background: var(--orange); color: rgb(255, 255, 255); border: 1.5px solid var(--orange); cursor: pointer; border-radius: 10px; min-height: 46px; padding: 0.7rem 1.15rem; font-size: 0.92rem; font-weight: 700; box-shadow: rgba(209, 83, 33, 0.28) 0px 8px 18px; }
+
+.rlg-submit-btn:hover { background: var(--orange-deep); border-color: var(--orange-deep); }
+
+.rlg-feedback-form { margin-top: 24px; animation: 0.3s ease 0s 1 normal none running rlgFadeIn; display: none; }
+
+.rlg-feedback-form textarea { resize: vertical; border: 1px solid rgb(229, 231, 235); border-radius: 8px; width: 100%; height: 100px; margin-bottom: 12px; padding: 12px; font-size: 14px; }
+
+.rlg-feedback-form textarea:focus { border-color: var(--orange); outline: none; box-shadow: rgba(209, 83, 33, 0.15) 0px 0px 0px 3px; }
+
+.rlg-thank-you { text-align: center; padding: 24px; display: none; }
+
+.rlg-thank-you p { color: rgb(55, 65, 81); margin: 0px; font-size: 16px; }
+
+.rlg-positive-reviews { text-align: left; border-top: 1px solid rgb(243, 244, 246); margin-top: 32px; padding-top: 24px; }
+
+.rlg-positive-reviews h3 { color: rgb(0, 0, 0); text-transform: uppercase; letter-spacing: 0.05em; margin: 0px 0px 16px; font-size: 14px; }
+
+.rlg-review { background: rgb(249, 250, 251); border-radius: 12px; gap: 12px; padding: 16px; display: flex; }
+
+.rlg-review-avatar { background: linear-gradient(135deg, var(--orange), var(--orange-deep)); color: rgb(255, 255, 255); border-radius: 50%; flex-shrink: 0; justify-content: center; align-items: center; width: 40px; height: 40px; font-size: 16px; font-weight: 600; display: flex; position: relative; }
+
+.rlg-review-avatar-img { object-fit: cover; border-radius: 50%; width: 100%; height: 100%; display: block; }
+
+.rlg-review-avatar-fallback span { color: rgb(255, 255, 255); justify-content: center; align-items: center; font-size: 16px; font-weight: 600; display: flex; position: absolute; inset: 0px; }
+
+.rlg-review-avatar-fallback.rlg-avatar-fallback { background: linear-gradient(135deg, var(--orange), var(--orange-deep)); }
+
+.rlg-review-content { flex: 1 1 0%; }
+
+.rlg-review-content strong { color: rgb(17, 24, 39); margin-bottom: 4px; font-size: 14px; display: block; }
+
+.rlg-review-content .rlg-stars { color: rgb(251, 191, 36); margin-bottom: 4px; font-size: 14px; }
+
+.rlg-review-content .rlg-time { color: rgb(156, 163, 175); margin-bottom: 8px; font-size: 12px; display: block; }
+
+.rlg-review-content p { color: rgb(75, 85, 99); margin: 0px; font-size: 13px; line-height: 1.5; }</style>
+  <style>
+    .gs-blog-main { max-width: 760px; margin: 0 auto; padding: 32px 20px 72px; }
+    .gs-blog-main h1,
+    .gs-blog-main h1.gs-post-title,
+    h1.gs-post-title {
+      font-size: clamp(1.5rem, 2.8vw, 2rem) !important;
+      line-height: 1.25 !important;
+      margin: 0 0 0.35em !important;
+      text-align: center !important;
+      overflow-wrap: anywhere;
+      font-weight: 800;
+    }
+    .gs-blog-date { font-size: 0.95rem; opacity: .7; margin: 0 0 1.25em; text-align: center; }
+    .gs-blog-main img { max-width: 100%; height: auto; }
+    .gs-blog-hero { width: 100%; height: auto; border-radius: 8px; margin: 0 0 1.5em; }
+    .gs-fallback-top {
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      flex-wrap: wrap; padding: 14px 24px; border-bottom: 1px solid rgba(0,0,0,.08);
+      background: #fff; color: #111;
+    }
+    .gs-fallback-top a { text-decoration: none; color: inherit; font-weight: 600; }
+    .gs-fallback-top nav {
+      display: flex !important; flex-direction: row !important; flex-wrap: wrap;
+      gap: 18px; align-items: center;
+    }
+    .gs-fallback-top nav a { white-space: nowrap; }
+    .gs-fallback-top img { height: 48px; width: auto; }
+    .gs-fallback-bottom {
+      margin-top: 48px; padding: 24px; border-top: 1px solid rgba(0,0,0,.08);
+      text-align: center; font-size: 0.9rem; opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="https://goatgaragedoorindy.com/#main">Skip to content</a><div class="scroll-progress" aria-hidden="true"><span style="transform: scaleX(0);"></span></div><div class="sticky-head"><header class="site-header"><div class="header-inner"><a class="logo" href="https://goatgaragedoorindy.com/" aria-label="Goat Garage Door Service"><img src="https://goatgaragedoorindy.com/_astro/logo-mark-light.BIz3D3bJ_ZhK9el.webp" alt="Goat Garage Door Service logo" title="Goat Garage Door Service" loading="lazy" decoding="async" width="168" height="184"></a><nav id="site-nav" class="site-nav" aria-label="Primary"><a href="https://goatgaragedoorindy.com/" aria-current="page">Home</a><a href="https://goatgaragedoorindy.com/about">About</a><div class="nav-drop"><a href="https://goatgaragedoorindy.com/services">Services</a><button class="nav-subtoggle" type="button" aria-expanded="false" aria-controls="nav-services" data-label-closed="Show services" data-label-open="Hide services"><span class="sr-only">Show services</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5 12 15.5l6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><ul id="nav-services"><li><a href="https://goatgaragedoorindy.com/services/garage-door-bottom-seal-replacement">Garage Door Bottom Seal Replacement</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-cable-replacement">Garage Door Cable Replacement</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-installation">Garage Door Installation</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-maintenance">Garage Door Maintenance</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-opener-installation">Garage Door Opener Installation</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-opener-repair">Garage Door Opener Repair</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-panel-replacement">Garage Door Panel Replacement</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-roller-replacement">Garage Door Roller Replacement</a></li><li><a href="https://goatgaragedoorindy.com/services/garage-door-spring-replacement">Garage Door Spring Replacement</a></li><li><a href="https://goatgaragedoorindy.com/services/off-track-garage-door-repair">Off-Track Garage Door Repair</a></li><li><a href="https://goatgaragedoorindy.com/services/commercial-garage-door-repair-installation">Commercial Garage Door Repair &amp; Installation</a></li></ul></div><div class="nav-drop"><a href="https://goatgaragedoorindy.com/service-areas">Service Areas</a><button class="nav-subtoggle" type="button" aria-expanded="false" aria-controls="nav-areas" data-label-closed="Show service areas" data-label-open="Hide service areas"><span class="sr-only">Show service areas</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5 12 15.5l6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button><ul id="nav-areas"><li><a href="https://goatgaragedoorindy.com/service-areas/carmel">Carmel</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/fortville">Fortville</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/anderson">Anderson</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/brownsburg">Brownsburg</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/greenfield">Greenfield</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/greenwood">Greenwood</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/indianapolis">Indianapolis</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/lawrence">Lawrence</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/mccordsville">McCordsville</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/noblesville">Noblesville</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/westfield">Westfield</a></li><li><a href="https://goatgaragedoorindy.com/service-areas/zionsville">Zionsville</a></li></ul></div><a href="https://goatgaragedoorindy.com/our-work">Our Work</a><a href="https://goatgaragedoorindy.com/contact">Contact</a></nav><a class="btn btn-orange header-quote" href="tel:+13178546917">Call now</a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Open menu</span><span></span><span></span><span></span></button></div></header>
+  
+  <main class="gs-blog-main" id="gs-blog-content">
+    <!-- gs-tools-hub-blog --><h1>Blog</h1>
+    <p>No posts yet.</p>
+  </main>
+  <footer><strong>Libby Clark</strong><span>5-star Google review</span></footer>
+</body>
+</html>
