@@ -1,6 +1,15 @@
 {
   "posts": [
     {
+      "id": 1400351900,
+      "slug": "garage-door-fails",
+      "title": "What to Do When Your Garage Door Fails in Fishers",
+      "excerpt": "If your garage door fails in Fishers, take immediate safety steps, assess visible problems, and decide whether you can make a temporary fix or need a professional. This guide walks you through those emergency garage door repair steps.",
+      "url": "https://goatgaragedoorindy.com/blogs/garage-door-fails/",
+      "publishedAt": "2026-11-09T23:01:45.872Z",
+      "image": "/blogs-images/uploads/1-tech-repair.D-qJwxzl_2eSdvK.webp"
+    },
+    {
       "id": 1581366211,
       "slug": "new-garage-door-opener-repair",
       "title": "New Garage Door Opener or Repair in Fishers",
@@ -26,15 +35,6 @@
       "url": "https://goatgaragedoorindy.com/blogs/replace-garage-door-bottom-seal/",
       "publishedAt": "2026-11-16T20:52:00.000Z",
       "image": "/blogs-images/uploads/1-blue-seal-160-82-bbb-90073899.png"
-    },
-    {
-      "id": 1400351900,
-      "slug": "garage-door-fails",
-      "title": "What to Do When Your Garage Door Fails in Fishers",
-      "excerpt": "If your garage door fails in Fishers, take immediate safety steps, assess visible problems, and decide whether you can make a temporary fix or need a professional. This guide walks you through those emergency garage door repair steps.",
-      "url": "https://goatgaragedoorindy.com/blogs/garage-door-fails/",
-      "publishedAt": "2026-11-09T22:29:00.000Z",
-      "image": "/blogs-images/uploads/1-tech-repair.D-qJwxzl_2eSdvK.webp"
     }
   ],
   "ownedListing": true
