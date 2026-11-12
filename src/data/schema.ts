@@ -34,7 +34,7 @@ export function localBusiness() {
 				name: 'Indiana',
 			},
 		})),
-		sameAs: [site.facebook, site.mapsUrl],
+		sameAs: [site.facebook, site.bbb, site.mapsUrl],
 		hasMap: site.mapsUrl,
 		description: `24/7 garage door repair and installation based at ${addressLine}.`,
 		hasOfferCatalog: {

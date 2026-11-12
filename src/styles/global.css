@@ -1838,6 +1838,10 @@ body:not(:has(.hero)):not(:has(.page-hero)) .nav-drop > a {
 	color: var(--navy);
 }
 
+.site-footer .footer-social a + a {
+	margin-left: 0.55rem;
+}
+
 .site-footer .footer-social a:hover {
 	background: var(--orange);
 	color: white;
