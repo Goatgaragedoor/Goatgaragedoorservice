@@ -1,0 +1,4 @@
+# gs-tools: /blogs/ moved to /blog/
+/blogs           /blog/                 301
+/blogs/*         /blog/:splat           301
+/blogs-images/*  /blog-images/:splat    301
